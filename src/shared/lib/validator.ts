@@ -1,52 +1,87 @@
 import {
-	PasswordValidateReturnType,
-	PasswordValidateType,
-	ValidateReturnTypes,
-	ValidateTypes
+  PasswordValidateReturnType,
+  PasswordValidateType,
+  ValidateReturnTypes,
+  ValidateTypes,
+  ValidationConditionsType
 } from '../types/types';
 
-const validatePassword = ({
-	password,
-	passwordRetype
-}: PasswordValidateType): PasswordValidateReturnType => {
-	const passwordRegex =
-		/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+export default class Validator {
+  private email: string;
+  private password: string;
+  private passwordRetype: string;
 
-	return {
-		isValidPass: passwordRegex.test(password),
-		isValidRetype: passwordRetype ? passwordRegex.test(passwordRetype) : false
-	};
-};
+  constructor(data: ValidateTypes) {
+    this.email = data.email;
+    this.password = data.password;
+    this.passwordRetype = data.passwordRetype || '';
+  }
 
-const validateEmail = (email: string) => {
-	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	return emailRegex.test(email);
-};
+  private validatePassword(): PasswordValidateReturnType {
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
-export const validateAuth = (data: ValidateTypes): ValidateReturnTypes => {
-	const inputValidation = validateInput(data);
-	const passwordValidation = validatePassword(data);
+    return {
+      isValidPass: passwordRegex.test(this.password),
+      isValidRetype: passwordRegex.test(this.passwordRetype)
+    };
+  }
 
-	return {
-		validEmail: validateEmail(data.email),
-		validPass: passwordValidation.isValidPass,
-		validRetypePass: passwordValidation.isValidRetype,
-		validateInputs: inputValidation
-	};
-};
+  private validateEmail(): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(this.email);
+  }
 
-const validateInput = (data: ValidateTypes): string | boolean => {
-	if (!data.email.trim() || !data.password.trim()) {
-		return 'Поля не могут быть пустыми';
-	}
+  private validateInput(): {isValid: boolean; message?: string} {
+    const validations: ValidationConditionsType[] = [
+      {
+        condition: !this.email.trim(),
+        message: 'Поле email не может быть пустым'
+      },
+      {
+        condition: !this.password.trim(),
+        message: 'Поле пароль не может быть пустым'
+      },
+      {
+        condition: this.password.length < 8,
+        message: 'Пароль должен быть больше 8 символов'
+      },
+      {
+        condition: this.passwordRetype && this.passwordRetype !== this.password,
+        message: 'Введенные пароли не совпадают'
+      }
+    ];
 
-	if (data.passwordRetype !== undefined && !data.passwordRetype.trim()) {
-		return 'Поле повторного ввода пароля не может быть пустым';
-	}
+    const failedValidation = validations.find(
+      validation => validation.condition
+    );
+    return {
+      isValid: !failedValidation,
+      message: failedValidation?.message
+    };
+  }
 
-	if (data.password.length < 8) {
-		return 'Пароль должен быть больше 8 символов';
-	}
+  public validate(): ValidateReturnTypes {
+    const inputValidation = this.validateInput();
+    const passwordValidation = this.validatePassword();
 
-	return true;
-};
+    return {
+      validEmail: this.validateEmail(),
+      validPass: passwordValidation.isValidPass,
+      validRetypePass: passwordValidation.isValidRetype,
+      validateInputs: inputValidation.isValid ? true : inputValidation.message
+    };
+  }
+
+  public getErrorMessage(validateData: ValidateReturnTypes): string {
+    if (!validateData.validEmail) {
+      return 'Невалидная почта';
+    } else if (!validateData.validPass || !validateData.validRetypePass) {
+      return 'Пароль не соответствует требованиям';
+    } else if (typeof validateData.validateInputs === 'string') {
+      return validateData.validateInputs;
+    } else {
+      return 'Непредвиденная ошибка, обновите страницу';
+    }
+  }
+}

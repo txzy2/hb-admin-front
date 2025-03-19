@@ -33,8 +33,8 @@ const Header: React.FC = () => {
       {localStorage.getItem('token') ? (
         <div className='flex items-center gap-3 text-[16px]'>
           <button title='Профиль'>
-            <Hover scale={1.05} className='cursor-pointer bg-[#685b14] bg-opacity-45 px-5 py-1 rounded-xl'>
-              Kamaev Anton
+            <Hover scale={1.05} className='cursor-pointer bg-[#685b14] bg-opacity-45 px-5 py-1 rounded-xl text-[13px]'>
+              {localStorage.getItem('email')}
             </Hover>
           </button>
 
@@ -42,6 +42,7 @@ const Header: React.FC = () => {
             title='Выход'
             onClick={() => {
               localStorage.removeItem('token');
+              localStorage.removeItem('email')
               navigate('/login');
             }}
           >
