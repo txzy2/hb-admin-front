@@ -1,9 +1,9 @@
-import { CircleAlert, Eye, EyeOff, Lock, LogIn, User2 } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import {CircleAlert, Eye, EyeOff, Lock, LogIn, User2} from 'lucide-react';
+import {Link, useNavigate} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 
-import { Hover } from '@/shared/animations';
-import { validateAuth } from '@/shared/lib/validator';
+import {Hover} from '@/shared/animations';
+import Validator from '@/shared/lib/validator';
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -25,7 +25,8 @@ const Login: React.FC = () => {
   const validateandLogIn = (event: React.MouseEvent) => {
     event.preventDefault();
 
-    const validateData = validateAuth({ email, password });
+    const validator = new Validator({email, password});
+    const validateData = validator.validate();
     console.log(validateData);
 
     if (
@@ -35,18 +36,15 @@ const Login: React.FC = () => {
       password === 'kal%08Py'
     ) {
       localStorage.setItem('token', '1234');
+      localStorage.setItem('email', email);
       navigate('/');
       console.log('Успешный вход');
-    } else if (validateData?.validateInputs === true) {
-      if (!validateData.validEmail) {
-        setError('Невалидная почта');
-      } else if (!validateData.validPass) {
-        setError('Пароль не соответствует требованиям');
-      } else {
-        setError('Непредвиденная ошибка, обновите страницу');
-      }
     } else {
-      setError(validateData.validateInputs);
+      setError(
+        validateData.validateInputs === true
+          ? validator.getErrorMessage(validateData)
+          : validateData.validateInputs
+      );
     }
   };
 
@@ -133,7 +131,7 @@ const Login: React.FC = () => {
 
         <div
           className='flex items-center justify-center gap-1 text-red-400 text-[12px]'
-          style={{ minHeight: '20px' }}
+          style={{minHeight: '20px'}}
         >
           {error && (
             <>
