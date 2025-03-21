@@ -1,9 +1,11 @@
-import { FadeIn, LeftToRight } from '@/shared/animations';
-import { Outlet, useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import { FadeIn, LeftToRight } from "@/shared/animations";
+import { Outlet, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import "@radix-ui/themes/styles.css";
 
-import { Header } from '@/components';
-import { Loader } from '@/shared/ui';
+import { Header } from "@/components";
+import { Loader } from "@/shared/ui";
+import { Code, Theme } from "@radix-ui/themes";
 
 /**
  * The Layout component serves as the main structure of the application.
@@ -14,11 +16,11 @@ import { Loader } from '@/shared/ui';
  * @returns {JSX.Element} The rendered Layout component.
  */
 const Layout: React.FC = () => {
-  const [loader, setLoader] = useState<boolean>(true);
-  const currentRoute = useLocation();
+	const [loader, setLoader] = useState<boolean>(true);
+	const currentRoute = useLocation();
 
-  // NOTE: пример подгрузки
-  /*const loadComponents = async () => {
+	// NOTE: пример подгрузки
+	/*const loadComponents = async () => {
     try {
       // Имитируем загрузку компонентов с задержкой
       await Promise.all([
@@ -34,57 +36,65 @@ const Layout: React.FC = () => {
     }
   };*/
 
-  // NOTE: Пока что эмулируем загрузу
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoader(false);
-    }, 4000);
+	// NOTE: Пока что эмулируем загрузу
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			setLoader(false);
+		}, 4000);
 
-    return () => clearTimeout(timeout);
-  }, []);
+		return () => clearTimeout(timeout);
+	}, []);
 
-  if (loader) {
-    return (
-      <FadeIn delay={0.5}>
-        <Loader
-          className='h-screen flex items-center justify-center gap-1'
-          needSpin={true}
-          iconSize={25}
-          title={{
-            need: true
-          }}
-          sub={false}
-        />
-      </FadeIn>
-    );
-  }
+	if (loader) {
+		return (
+			<FadeIn delay={0.5}>
+				<Loader
+					className="h-screen flex items-center justify-center gap-1"
+					needSpin={true}
+					iconSize={25}
+					title={{
+						need: true,
+					}}
+					sub={false}
+				/>
+			</FadeIn>
+		);
+	}
 
-  return (
-    <div>
-      {currentRoute.pathname === '/login' ||
-        currentRoute.pathname === '/register' ||
-        currentRoute.pathname === '*' ? null : (
-        <Header />
-      )}
+	return (
+		<Theme
+			accentColor="amber"
+			grayColor="sand"
+			panelBackground="solid"
+			appearance="dark"
+			radius="medium"
+		>
+			<div>
+				{currentRoute.pathname === "/login" ||
+				currentRoute.pathname === "/register" ||
+				currentRoute.pathname === "*" ? null : (
+					<Header />
+				)}
 
-      <div className='w-full'>
-        <Outlet />
-      </div>
+				<div className="w-full">
+					<Outlet />
+				</div>
 
-      <footer>
-        <LeftToRight className='h-[5vh] text-[13px] flex items-center justify-center gap-1'>
-          <div className='flex items-center gap-1'>
-            HookahBooking
-            <FadeIn delay={1.5}>
-              <span className='font-bold text-orange-400'>
-                {import.meta.env.VITE_APP_VERSION}
-              </span>
-            </FadeIn>
-          </div>
-        </LeftToRight>
-      </footer>
-    </div>
-  );
+				<footer>
+					<LeftToRight className="h-[5vh] text-[13px] flex items-center justify-center gap-1">
+						<div className="flex items-center gap-1">
+							HookahBooking
+							<FadeIn delay={1.5}>
+								<Code className="font-bold text-orange-400">
+									{import.meta.env.VITE_APP_VERSION}
+								</Code>
+							</FadeIn>
+						</div>
+					</LeftToRight>
+				</footer>
+			</div>
+		</Theme>
+	);
 };
 
 export default Layout;
