@@ -3,9 +3,14 @@ import {Link, useNavigate} from 'react-router-dom';
 
 import {LogIn} from 'lucide-react';
 import React from 'react';
+import useAuthStore from '@/store/auth/auth-store';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const email = useAuthStore(state => state.email);
+  const logout = useAuthStore(state => state.logout);
 
   return (
     <div className='h-[10vh] flex items-center justify-between gap-2 px-10 '>
@@ -17,7 +22,7 @@ const Header: React.FC = () => {
         </Hover>
       </LeftToRight>
 
-      {localStorage.getItem('token') && (
+      {isAuthenticated && (
         <DownToUp>
           <div className='flex items-center gap-5 font-bold'>
             <Hover scale={1.05}>
@@ -30,19 +35,21 @@ const Header: React.FC = () => {
         </DownToUp>
       )}
 
-      {localStorage.getItem('token') ? (
+      {isAuthenticated ? (
         <div className='flex items-center gap-3 text-[16px]'>
           <button title='Профиль'>
-            <Hover scale={1.05} className='cursor-pointer bg-[#685b14] bg-opacity-45 px-5 py-1 rounded-xl text-[13px]'>
-              {localStorage.getItem('email')}
+            <Hover
+              scale={1.05}
+              className='cursor-pointer bg-[#685b14] bg-opacity-45 px-5 py-1 rounded-xl text-[13px]'
+            >
+              {email}
             </Hover>
           </button>
 
           <button
             title='Выход'
             onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('email')
+              logout();
               navigate('/login');
             }}
           >

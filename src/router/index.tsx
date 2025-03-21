@@ -5,7 +5,7 @@ import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
 import ProtectedRoute from '@/shared/lib/ProtectedRoute';
 import Register from '@/pages/Register';
-import { createBrowserRouter } from 'react-router-dom';
+import {createBrowserRouter} from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <App />
           </ProtectedRoute>
-        ),
+        )
       },
       {
         path: 'about',
@@ -26,11 +26,11 @@ export const router = createBrowserRouter([
           <ProtectedRoute>
             <About />
           </ProtectedRoute>
-        ),
+        )
       },
       {
         path: 'login',
-        element: <Login />,
+        element: <Login />
       },
       {
         path: 'register',
@@ -38,8 +38,8 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <NotFound />,
-      },
-    ],
-  },
+        element: <NotFound />
+      }
+    ]
+  }
 ]);

@@ -1,93 +1,95 @@
-import { CircleAlert, Eye, EyeOff, Lock, LogIn, User2 } from "lucide-react";
-import { IconButton, TextField } from "@radix-ui/themes";
-import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import {CircleAlert, Eye, EyeOff, Lock, LogIn, User2} from 'lucide-react';
+import {IconButton, TextField} from '@radix-ui/themes';
+import {Link, useNavigate} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 
-import { Hover } from "@/shared/animations";
-import Validator from "@/shared/lib/validator";
+import {Hover} from '@/shared/animations';
+import Validator from '@/shared/lib/validator';
+import useAuthStore from '@/store/auth/auth-store';
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const [islValid, setIslValid] = useState<boolean>(true);
   const [error, setError] = useState<string | boolean>();
 
+  const login = useAuthStore(state => state.login);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/");
-    }
-  }, [navigate]);
+  const getJWT = async (jwt: string) => {
+    login(jwt, email);
+  };
 
-  const validateandLogIn = (event: React.MouseEvent) => {
+  const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
 
-    const validator = new Validator({ email, password });
+    const validator = new Validator({email, password});
     const validateData = validator.validate();
     console.log(validateData);
 
     if (
       validateData.validEmail &&
       validateData.validPass &&
-      email === "kamaeff2@gmail.com" &&
-      password === "kal%08Py"
+      email === 'kamaeff2@gmail.com' &&
+      password === 'kal%08Py'
     ) {
-      localStorage.setItem("token", "1234");
-      localStorage.setItem("email", email);
-      navigate("/");
-      console.log("Успешный вход");
+      const jwt =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
+
+      await getJWT(jwt);
+
+      navigate('/');
+      console.log('Успешный вход');
     } else {
       setError(
         validateData.validateInputs === true
           ? validator.getErrorMessage(validateData)
-          : validateData.validateInputs,
+          : validateData.validateInputs
       );
     }
   };
 
   return (
-    <div className="h-[95vh] flex flex-col items-center justify-center gap-5">
-      <a href="/">
+    <div className='h-[95vh] flex flex-col items-center justify-center gap-5'>
+      <a href='/'>
         {/* <img src='/LogoLight.png' alt='loginLogo' width={230} /> */}
-        <img src="/logo.png" alt="loginLogo" width={230} />
+        <img src='/logo.png' alt='loginLogo' width={230} />
       </a>
 
-      <form className="w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-5 text-[14px]">
+      <form className='w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-5 text-[14px]'>
         <TextField.Root
           className={`w-full text-[13px]`}
-          type="email"
-          placeholder="Электронная почта"
+          type='email'
+          placeholder='Электронная почта'
           maxLength={30}
           value={email}
-          onChange={(e) => {
+          onChange={e => {
             setEmail(e.target.value);
-            setError("");
+            setError('');
             setIslValid(true);
           }}
         >
           <TextField.Slot>
-            <User2 size={20} color={`${!islValid ? "#f87171" : "#fb923c"}`} />
+            <User2 size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
           </TextField.Slot>
         </TextField.Root>
 
         <TextField.Root
           className={`text-[13px]`}
-          type={showPassword ? "text" : "password"}
-          placeholder="Пароль"
+          type={showPassword ? 'text' : 'password'}
+          placeholder='Пароль'
           maxLength={24}
           value={password}
-          onChange={(e) => {
+          onChange={e => {
             setPassword(e.target.value);
-            setError("");
+            setError('');
             setIslValid(true);
           }}
         >
           <TextField.Slot>
-            <Lock size={20} color={`${!islValid ? "#f87171" : "#fb923c"}`} />
+            <Lock size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
           </TextField.Slot>
 
           <TextField.Slot>
@@ -101,12 +103,12 @@ const Login: React.FC = () => {
                 {showPassword ? (
                   <EyeOff
                     size={20}
-                    color={`${!islValid ? "#f87171" : "#fb923c"}`}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
                   />
                 ) : (
                   <Eye
                     size={20}
-                    color={`${!islValid ? "#f87171" : "#fb923c"}`}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
                   />
                 )}
               </Hover>
@@ -114,27 +116,27 @@ const Login: React.FC = () => {
           </TextField.Slot>
         </TextField.Root>
 
-        <div className="flex flex-col items-center justify-between gap-2">
-          <Hover scale={1.02} className="w-full">
+        <div className='flex flex-col items-center justify-between gap-2'>
+          <Hover scale={1.02} className='w-full'>
             <IconButton
-              type="submit"
+              type='submit'
               onClick={validateandLogIn}
-              className="w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-black font-bold"
+              className='w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-black font-bold'
             >
               <LogIn size={18} strokeWidth={3} /> Войти
             </IconButton>
           </Hover>
 
           <Hover scale={1.05}>
-            <Link to="/register" className="text-[#fb923c] text-[13px]">
+            <Link to='/register' className='text-[#fb923c] text-[13px]'>
               Еще нет аккаунта?
             </Link>
           </Hover>
         </div>
 
         <div
-          className="flex items-center justify-center gap-1 text-red-400 text-[12px]"
-          style={{ minHeight: "20px" }}
+          className='flex items-center justify-center gap-1 text-red-400 text-[12px]'
+          style={{minHeight: '20px'}}
         >
           {error && (
             <>
