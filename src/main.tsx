@@ -1,14 +1,16 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
+import '@radix-ui/themes/styles.css';
+import '@radix-ui/themes/layout/tokens.css';
+import '@radix-ui/themes/layout/components.css';
+import '@radix-ui/themes/layout/utilities.css';
+import './assets/styles/index.css';
 
-import "@radix-ui/themes/styles.css";
+import {RouterProvider} from 'react-router-dom';
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
+import {router} from '@/router';
 
-import { router } from "@/router";
-import "./assets/styles/index.css";
-
-createRoot(document.getElementById("root")!).render(
-	<StrictMode>
-		<RouterProvider router={router} />
-	</StrictMode>,
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
 );

@@ -2,70 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	/* --color-bg-light: #f5f5dc; */
-	--color-bg-light: #2c2c2c;
-	/* --color-text-light: #333; */
-	--color-text-light: #f5f5dc;
-
-	--color-bg-dark: #2c2c2c;
-	--color-text-dark: #f5f5dc;
-
-	--color-secondary: #6d213c;
-	--color-gold: #ffd700;
-
-	--color-light-blue: #40e0d0;
-}
-
-@media (prefers-color-scheme: light) {
-	:root {
-		--color-bg: var(--color-bg-light);
-		--color-text: var(--color-text-light);
-	}
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--color-bg: var(--color-bg-dark);
-		--color-text: var(--color-text-dark);
-	}
-}
-
 body {
-	font-synthesis: none;
-	text-rendering: optimizeLegibility;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-	font-family: "Nunito", sans-serif;
+  transition: background 1.5s ease-in-out, color 1.5s ease-in-out;
+}
 
-	background: var(--color-bg);
-	color: var(--color-text);
+.bg {
+  font-family: 'Inter', 'Nunito', sans-serif;
 
-	transition: background 1.5s ease-in-out, color 1.5s ease-in-out;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(78, 78, 78, 0.5)),
+    url('../../../public/bg.png');
+  background-size: cover;
+  background-position: center;
 }
 
 a {
-	font-weight: 500;
-	text-decoration: inherit;
+  font-weight: 500;
+  text-decoration: inherit;
 }
 
 @media (max-width: 768px) {
-	.about {
-		flex-direction: column;
+  .about {
+    flex-direction: column;
 
-		gap: 0;
-	}
+    gap: 0;
+  }
 
-	.about__border {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
+  .about__border {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 
-		align-items: center;
+    align-items: center;
 
-		margin: 10px 0;
+    margin: 10px 0;
 
-		border: none;
-	}
+    border: none;
+  }
 }

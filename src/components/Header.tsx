@@ -1,61 +1,141 @@
+import {Button, Dialog, DropdownMenu, Flex} from '@radix-ui/themes';
 import {DownToUp, Hover, LeftToRight} from '@/shared/animations';
 import {Link, useNavigate} from 'react-router-dom';
+import {LogOut, User2, X} from 'lucide-react';
+import React, {useEffect, useState} from 'react';
+import useAuthStore, {
+  useAuthEmail,
+  useIsAuthenticated
+} from '@/store/auth/auth-store';
 
-import {LogIn} from 'lucide-react';
-import React from 'react';
+import {ThemeSwitch} from '@/shared/ui';
+import axios from 'axios';
+import {useTheme} from '@/store/ui/ui-store';
 
 const Header: React.FC = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
   const navigate = useNavigate();
+
+  const isAuthenticated = useIsAuthenticated();
+  const email = useAuthEmail();
+  const logout = useAuthStore(state => state.logout);
+  const theme = useTheme();
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (
+      event.ctrlKey &&
+      event.shiftKey &&
+      (event.key === 'E' || event.key === 'У')
+    ) {
+      setIsDialogOpen(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <div className='h-[10vh] flex items-center justify-between gap-2 px-10 '>
-      <LeftToRight delay={0.5}>
-        <Hover scale={1.1}>
-          <Link className='font-bold' to='/'>
-            <img src='/logo.png' alt='Logo' />
-          </Link>
-        </Hover>
-      </LeftToRight>
-
-      {localStorage.getItem('token') && (
-        <DownToUp>
-          <div className='flex items-center gap-5 font-bold'>
-            <Hover scale={1.05}>
-              <button onClick={() => navigate('/')}>Dashboard</button>
-            </Hover>
-            <Hover scale={1.05}>
-              <button onClick={() => navigate('/about')}>Clients</button>
-            </Hover>
-          </div>
-        </DownToUp>
-      )}
-
-      {localStorage.getItem('token') ? (
-        <div className='flex items-center gap-3 text-[16px]'>
-          <button title='Профиль'>
-            <Hover scale={1.05} className='cursor-pointer bg-[#685b14] bg-opacity-45 px-5 py-1 rounded-xl text-[13px]'>
-              {localStorage.getItem('email')}
-            </Hover>
-          </button>
-
-          <button
-            title='Выход'
-            onClick={() => {
-              localStorage.removeItem('token');
-              localStorage.removeItem('email')
-              navigate('/login');
-            }}
-          >
+      {isAuthenticated && (
+        <>
+          <LeftToRight delay={0.5}>
             <Hover scale={1.1}>
-              <LogIn size={20} className='text-orange-400' />
+              <Link className='font-bold' to='/panel'>
+                <img src='/logo.png' alt='Logo' />
+              </Link>
             </Hover>
-          </button>
-        </div>
-      ) : (
-        <Hover scale={1.05}>
-          <Link to='/login'>Log In</Link>
-        </Hover>
+          </LeftToRight>
+
+          <DownToUp>
+            <div className='flex items-center gap-5 font-bold'>
+              <Hover scale={1.05}>
+                <button onClick={() => navigate('/panel')}>Dashboard</button>
+              </Hover>
+              <Hover scale={1.05}>
+                <button onClick={() => navigate('/panel/about')}>
+                  Clients
+                </button>
+              </Hover>
+            </div>
+          </DownToUp>
+        </>
       )}
+
+      <div className='flex items-center gap-2'>
+        {isAuthenticated ? (
+          <div className='flex items-center gap-3 text-[16px]'>
+            <ThemeSwitch />
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger
+                title='Профиль'
+                className={`cursor-pointer bg-transparent p-0 ${
+                  theme === 'light' ? 'text-black' : 'text-white'
+                } outline-none`}
+              >
+                <Button variant='soft'>
+                  {email}
+                  <DropdownMenu.TriggerIcon />
+                </Button>
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu.Content>
+                <Hover scale={1.01}>
+                  <DropdownMenu.Item
+                    className='cursor-pointer'
+                    shortcut='Ctrl+Shift+E'
+                  >
+                    <User2 size={16} /> Профиль
+                  </DropdownMenu.Item>
+                </Hover>
+                <Hover scale={1.01}>
+                  <DropdownMenu.Item
+                    className='cursor-pointer font-bold'
+                    onClick={() => {
+                      logout();
+                      navigate('/');
+
+                      window.location.reload();
+                    }}
+                  >
+                    <LogOut size={16} /> Выйти
+                  </DropdownMenu.Item>
+                </Hover>
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+          </div>
+        ) : (
+          ''
+        )}
+      </div>
+
+      <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog.Content>
+          <Dialog.Title>
+            <Flex
+              justify={'between'}
+              className={theme === 'light' ? 'text-black' : 'text-white'}
+            >
+              {email}
+
+              <Hover scale={1.02}>
+                <Button
+                  className='bg-transparent cursor-pointer p-0 outline-none'
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  <X size={18} className='text-orange-500' />
+                </Button>
+              </Hover>
+            </Flex>
+          </Dialog.Title>
+          <Dialog.Description>Тут будет профиль</Dialog.Description>
+        </Dialog.Content>
+      </Dialog.Root>
     </div>
   );
 };
