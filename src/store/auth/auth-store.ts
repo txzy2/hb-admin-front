@@ -1,36 +1,55 @@
-import {create} from 'zustand';
 import Cookies from 'js-cookie';
+import {create} from 'zustand';
 
-// Определяем интерфейс для состояния хранилища
 interface AuthState {
-  token: string | null;
+  jwt: string | null;
   email: string | null;
   isAuthenticated: boolean;
-  login: (token: string, email: string) => void;
+  login: (jwt: string, email: string) => void;
   logout: () => void;
 }
 
-// Создаем хранилище с типизацией
-const useAuthStore = create<AuthState>(set => ({
-  token: Cookies.get('token') || null,
-  email: localStorage.getItem('email') || null,
-  isAuthenticated: !!Cookies.get('token'),
+const clearAuth = () => {
+  Cookies.remove('jwt');
+  localStorage.removeItem('email');
+};
 
-  login: (token, email) => {
-    Cookies.set('token', token, {
-      expires: 1,
-      secure: true,
-      sameSite: 'strict'
-    });
-    localStorage.setItem('email', email);
-    set({token, isAuthenticated: true, email});
+const setAuth = (email: string, jwt: string) => {
+  Cookies.set('jwt', jwt, {
+    expires: 1,
+    secure: true,
+    sameSite: 'strict'
+  });
+  localStorage.setItem('email', email);
+};
+
+const useAuthStore = create<AuthState>(set => ({
+  jwt: Cookies.get('jwt') ?? null,
+  email: localStorage.getItem('email') ?? null,
+  isAuthenticated: !!Cookies.get('jwt'),
+
+  login: (jwt, email) => {
+    try {
+      setAuth(email, jwt);
+      set({jwt, email, isAuthenticated: true});
+    } catch (error) {
+      console.error('Failed to login:', error);
+    }
   },
 
   logout: () => {
-    Cookies.remove('token');
-    localStorage.removeItem('email');
-    set({token: null, isAuthenticated: false, email: null});
+    try {
+      clearAuth();
+      set({jwt: null, email: null, isAuthenticated: false});
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
   }
 }));
+
+export const useAuthToken = () => useAuthStore(state => state.jwt);
+export const useAuthEmail = () => useAuthStore(state => state.email);
+export const useIsAuthenticated = () =>
+  useAuthStore(state => state.isAuthenticated);
 
 export default useAuthStore;

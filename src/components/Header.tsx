@@ -1,15 +1,18 @@
 import {DownToUp, Hover, LeftToRight} from '@/shared/animations';
 import {Link, useNavigate} from 'react-router-dom';
+import useAuthStore, {
+  useAuthEmail,
+  useIsAuthenticated
+} from '@/store/auth/auth-store';
 
 import {LogIn} from 'lucide-react';
 import React from 'react';
-import useAuthStore from '@/store/auth/auth-store';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
 
-  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-  const email = useAuthStore(state => state.email);
+  const isAuthenticated = useIsAuthenticated();
+  const email = useAuthEmail();
   const logout = useAuthStore(state => state.logout);
 
   return (

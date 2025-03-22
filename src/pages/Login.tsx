@@ -2,10 +2,10 @@ import {CircleAlert, Eye, EyeOff, Lock, LogIn, User2} from 'lucide-react';
 import {IconButton, TextField} from '@radix-ui/themes';
 import {Link, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
+import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
 import Validator from '@/shared/lib/validator';
-import useAuthStore from '@/store/auth/auth-store';
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -15,19 +15,21 @@ const Login: React.FC = () => {
   const [islValid, setIslValid] = useState<boolean>(true);
   const [error, setError] = useState<string | boolean>();
 
-  const login = useAuthStore(state => state.login);
   const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
+  const isAuthenticated = useIsAuthenticated();
 
-  const getJWT = async (jwt: string) => {
-    login(jwt, email);
-  };
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
-  const validateandLogIn = async (event: React.MouseEvent) => {
+  const validateandLogIn = (event: React.MouseEvent) => {
     event.preventDefault();
 
     const validator = new Validator({email, password});
     const validateData = validator.validate();
-    console.log(validateData);
 
     if (
       validateData.validEmail &&
@@ -35,11 +37,7 @@ const Login: React.FC = () => {
       email === 'kamaeff2@gmail.com' &&
       password === 'kal%08Py'
     ) {
-      const jwt =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
-
-      await getJWT(jwt);
-
+      login('1234', email);
       navigate('/');
       console.log('Успешный вход');
     } else {
