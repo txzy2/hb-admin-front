@@ -21,7 +21,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/panel');
     }
   }, [isAuthenticated, navigate]);
 
@@ -38,7 +38,7 @@ const Login: React.FC = () => {
       password === 'kal%08Py'
     ) {
       login('1234', email);
-      navigate('/');
+      navigate('/panel');
       console.log('Успешный вход');
     } else {
       setError(

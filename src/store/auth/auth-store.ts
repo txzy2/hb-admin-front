@@ -12,6 +12,7 @@ interface AuthState {
 const clearAuth = () => {
   Cookies.remove('jwt');
   localStorage.removeItem('email');
+  localStorage.setItem('theme', 'dark');
 };
 
 const setAuth = (email: string, jwt: string) => {
