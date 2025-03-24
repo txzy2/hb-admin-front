@@ -1,11 +1,11 @@
 import FadeIn from '@/shared/animations/FadeIn';
-import { Main } from '@/components';
+import {Main} from '@/components';
 
 function App() {
   return (
-      <FadeIn>
-        <Main />
-      </FadeIn>
+    <FadeIn>
+      <Main />
+    </FadeIn>
   );
 }
 

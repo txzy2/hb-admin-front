@@ -1,6 +1,5 @@
 import {
   PasswordValidateReturnType,
-  PasswordValidateType,
   ValidateReturnTypes,
   ValidateTypes,
   ValidationConditionsType
@@ -55,6 +54,7 @@ export default class Validator {
     const failedValidation = validations.find(
       validation => validation.condition
     );
+
     return {
       isValid: !failedValidation,
       message: failedValidation?.message

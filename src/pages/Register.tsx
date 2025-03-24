@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import RegisterStepOne from '@/components/auth/RegisterStepOne';
 import {ValidateTypes} from '@/shared/types/types';
 import Validator from '@/shared/lib/validator';
+import useAuthStore from '@/store/auth/auth-store';
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -13,7 +14,7 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | boolean>();
   const [step, setStep] = useState<number>(1);
 
-  // const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
 
   const validateandLogIn = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -32,10 +33,9 @@ const Register: React.FC = () => {
       validateData.validPass &&
       validateData.validRetypePass
     ) {
-      localStorage.setItem('token', '1234');
-	  localStorage.setItem('email', email);
-      // navigate('/');
-	  setStep(2);
+      login('1234', email);
+
+      setStep(2);
       console.log('Зареган');
     } else {
       setIslValid(false);

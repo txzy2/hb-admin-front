@@ -1,6 +1,8 @@
 import {CircleAlert, Eye, EyeOff, Lock, LogIn, User2} from 'lucide-react';
+import {IconButton, TextField} from '@radix-ui/themes';
 import {Link, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
+import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
 import Validator from '@/shared/lib/validator';
@@ -14,20 +16,20 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | boolean>();
 
   const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
+  const isAuthenticated = useIsAuthenticated();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/');
+    if (isAuthenticated) {
+      navigate('/panel');
     }
-  }, [navigate]);
+  }, [isAuthenticated, navigate]);
 
   const validateandLogIn = (event: React.MouseEvent) => {
     event.preventDefault();
 
     const validator = new Validator({email, password});
     const validateData = validator.validate();
-    console.log(validateData);
 
     if (
       validateData.validEmail &&
@@ -35,9 +37,8 @@ const Login: React.FC = () => {
       email === 'kamaeff2@gmail.com' &&
       password === 'kal%08Py'
     ) {
-      localStorage.setItem('token', '1234');
-      localStorage.setItem('email', email);
-      navigate('/');
+      login('1234', email);
+      navigate('/panel');
       console.log('Успешный вход');
     } else {
       setError(
@@ -55,72 +56,74 @@ const Login: React.FC = () => {
         <img src='/logo.png' alt='loginLogo' width={230} />
       </a>
 
-      <form className='flex flex-col gap-5 text-[14px]'>
-        <div className='relative'>
-          <input
-            className={`px-24 pb-1 bg-transparent border-b outline-none pl-8 w-full text-[13px]`}
-            type='email'
-            placeholder='Электронная почта'
-            maxLength={30}
-            value={email}
-            onChange={e => {
-              setEmail(e.target.value);
-              setError('');
-              setIslValid(true);
-            }}
-          />
-          <span className='absolute left-1 top-1/3 transform -translate-y-1/2'>
+      <form className='w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-5 text-[14px]'>
+        <TextField.Root
+          className={`w-full text-[13px]`}
+          type='email'
+          placeholder='Электронная почта'
+          maxLength={30}
+          value={email}
+          onChange={e => {
+            setEmail(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
             <User2 size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-          </span>
-        </div>
+          </TextField.Slot>
+        </TextField.Root>
 
-        <div className='relative'>
-          <input
-            className={`px-24 pb-1 bg-transparent border-b outline-none pl-8 w-full text-[13px]`}
-            type={showPassword ? 'text' : 'password'}
-            placeholder='Пароль'
-            maxLength={24}
-            value={password}
-            onChange={e => {
-              setPassword(e.target.value);
-              setError('');
-              setIslValid(true);
-            }}
-          />
-
-          <span className='absolute left-1 top-1/3 transform -translate-y-1/2'>
+        <TextField.Root
+          className={`text-[13px]`}
+          type={showPassword ? 'text' : 'password'}
+          placeholder='Пароль'
+          maxLength={24}
+          value={password}
+          onChange={e => {
+            setPassword(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
             <Lock size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-          </span>
+          </TextField.Slot>
 
-          <button
-            onClick={(event: React.MouseEvent) => {
-              event.preventDefault();
-              setShowPassword(!showPassword);
-            }}
-            className='absolute right-1 top-1/2 transform -translate-y-1/2'
-          >
-            <Hover scale={1.1}>
-              {showPassword ? (
-                <EyeOff
-                  size={20}
-                  color={`${!islValid ? '#f87171' : '#fb923c'}`}
-                />
-              ) : (
-                <Eye size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-              )}
-            </Hover>
-          </button>
-        </div>
+          <TextField.Slot>
+            <button
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setShowPassword(!showPassword);
+              }}
+            >
+              <Hover scale={1.1}>
+                {showPassword ? (
+                  <EyeOff
+                    size={20}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
+                  />
+                ) : (
+                  <Eye
+                    size={20}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
+                  />
+                )}
+              </Hover>
+            </button>
+          </TextField.Slot>
+        </TextField.Root>
 
         <div className='flex flex-col items-center justify-between gap-2'>
-          <button className='w-full' type='submit' onClick={validateandLogIn}>
-            <Hover
-              scale={1.02}
-              className='flex items-center gap-2 justify-center py-2 bg-[#fb923c] text-gray-800 font-bold rounded-2xl'
+          <Hover scale={1.02} className='w-full'>
+            <IconButton
+              type='submit'
+              onClick={validateandLogIn}
+              className='w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-black font-bold'
             >
               <LogIn size={18} strokeWidth={3} /> Войти
-            </Hover>
-          </button>
+            </IconButton>
+          </Hover>
 
           <Hover scale={1.05}>
             <Link to='/register' className='text-[#fb923c] text-[13px]'>

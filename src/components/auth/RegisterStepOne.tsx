@@ -1,159 +1,186 @@
+import {Callout, IconButton, TextField} from '@radix-ui/themes';
+
 import {
-	CircleAlert,
-	Eye,
-	EyeOff,
-	FileLock2,
-	Lock,
-	LogIn,
-	User2
+  CircleAlert,
+  Eye,
+  EyeOff,
+  FileLock2,
+  Lock,
+  LogIn,
+  User2
 } from 'lucide-react';
 
-import { Hover } from '@/shared/animations';
-import { Link } from 'react-router-dom';
+import {FadeIn, Hover} from '@/shared/animations';
+import {Link} from 'react-router-dom';
 import React from 'react';
+import {motion} from 'framer-motion';
 
 interface StepOneProps {
-	email: string;
-	password: string;
-	passwordRetype: string;
-	showPassword: boolean;
-	islValid: boolean;
-	error?: string | boolean;
-	setEmail: (value: string) => void;
-	setPassword: (value: string) => void;
-	setPasswordRetype: (value: string) => void;
-	setShowPassword: (value: boolean) => void;
-	setError: (value: string) => void;
-	setIslValid: (value: boolean) => void;
-	validateandLogIn: (event: React.MouseEvent) => void;
+  email: string;
+  password: string;
+  passwordRetype: string;
+  showPassword: boolean;
+  islValid: boolean;
+  error?: string | boolean;
+  setEmail: (value: string) => void;
+  setPassword: (value: string) => void;
+  setPasswordRetype: (value: string) => void;
+  setShowPassword: (value: boolean) => void;
+  setError: (value: string) => void;
+  setIslValid: (value: boolean) => void;
+  validateandLogIn: (event: React.MouseEvent) => void;
 }
 
 const RegisterStepOne: React.FC<StepOneProps> = ({
-	email,
-	password,
-	passwordRetype,
-	showPassword,
-	islValid,
-	error,
-	setEmail,
-	setPassword,
-	setPasswordRetype,
-	setShowPassword,
-	setError,
-	setIslValid,
-	validateandLogIn
+  email,
+  password,
+  passwordRetype,
+  showPassword,
+  islValid,
+  error,
+  setEmail,
+  setPassword,
+  setPasswordRetype,
+  setShowPassword,
+  setError,
+  setIslValid,
+  validateandLogIn
 }) => {
-	return (
-		<div className='flex flex-col items-center gap-5'>
-			<a href='/'>
-				<img src='/logo.png' alt='loginLogo' width={230} />
-			</a>
+  return (
+    <div className='flex flex-col items-center gap-7'>
+      <FadeIn>
+        <a href='/'>
+          <img src='/logo.png' alt='loginLogo' width={230} />
+        </a>
+      </FadeIn>
 
-			<form className='flex flex-col gap-4 text-[14px]'>
-				<div className='relative'>
-					<input
-						className={`px-24 pb-1 bg-transparent border-b outline-none pl-8 w-full text-[13px]`}
-						type='email'
-						placeholder='Электронная почта'
-						maxLength={30}
-						value={email}
-						onChange={e => {
-							setEmail(e.target.value);
-							setError('');
-							setIslValid(true);
-						}}
-					/>
-					<span className='absolute left-1 top-1/3 transform -translate-y-1/2'>
-						<User2 size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-					</span>
-				</div>
+      <form className='w-[80%] xl:w-1/2 flex flex-col gap-3 text-[14px]'>
+        <TextField.Root
+          className={`w-full text-[13px]`}
+          type='email'
+          placeholder='Электронная почта'
+          maxLength={30}
+          value={email}
+          onChange={e => {
+            setEmail(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
+            <User2 size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
+          </TextField.Slot>
+        </TextField.Root>
 
-				<div className='relative'>
-					<input
-						className={`px-24 pb-1 bg-transparent border-b outline-none pl-8 w-full text-[13px]`}
-						type={showPassword ? 'text' : 'password'}
-						placeholder='Пароль'
-						maxLength={24}
-						value={password}
-						onChange={e => {
-							setPassword(e.target.value);
-							setError('');
-							setIslValid(true);
-						}}
-					/>
-					<span className='absolute left-1 top-1/3 transform -translate-y-1/2'>
-						<Lock size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-					</span>
-				</div>
+        <TextField.Root
+          className={`w-full text-[13px]`}
+          type={showPassword ? 'text' : 'password'}
+          placeholder='Пароль'
+          maxLength={24}
+          value={password}
+          onChange={e => {
+            setPassword(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
+            <Lock size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
+          </TextField.Slot>
+        </TextField.Root>
 
-				<div className='relative'>
-					<input
-						className={`px-24 pb-1 bg-transparent border-b outline-none pl-8 w-full text-[13px]`}
-						type={showPassword ? 'text' : 'password'}
-						placeholder='Повторите пароль'
-						maxLength={24}
-						value={passwordRetype}
-						onChange={e => {
-							setPasswordRetype(e.target.value);
-							setError('');
-							setIslValid(true);
-						}}
-					/>
-					<span className='absolute left-1 top-1/3 transform -translate-y-1/2'>
-						<FileLock2
-							size={20}
-							color={`${!islValid ? '#f87171' : '#fb923c'}`}
-						/>
-					</span>
+        <TextField.Root
+          className={`w-full text-[13px]`}
+          type={showPassword ? 'text' : 'password'}
+          maxLength={24}
+          placeholder={'Повторите пароль'}
+          value={passwordRetype}
+          onChange={e => {
+            setPasswordRetype(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
+            <FileLock2
+              size={20}
+              color={`${!islValid ? '#f87171' : '#fb923c'}`}
+            />
+          </TextField.Slot>
 
-					<button
-						onClick={(event: React.MouseEvent) => {
-							event.preventDefault();
-							setShowPassword(!showPassword);
-						}}
-						className='absolute right-1 top-1/2 transform -translate-y-1/2'
-					>
-						<Hover scale={1.1}>
-							{showPassword ? (
-								<EyeOff
-									size={20}
-									color={`${!islValid ? '#f87171' : '#fb923c'}`}
-								/>
-							) : (
-								<Eye size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
-							)}
-						</Hover>
-					</button>
-				</div>
+          <TextField.Slot>
+            <button
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault();
+                setShowPassword(!showPassword);
+              }}
+            >
+              <Hover scale={1.1}>
+                {showPassword ? (
+                  <EyeOff
+                    size={20}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
+                  />
+                ) : (
+                  <Eye
+                    size={20}
+                    color={`${!islValid ? '#f87171' : '#fb923c'}`}
+                  />
+                )}
+              </Hover>
+            </button>
+          </TextField.Slot>
+        </TextField.Root>
 
-				<button type='submit' onClick={validateandLogIn}>
-					<Hover
-						scale={1.02}
-						className='flex items-center gap-2 justify-center py-2 bg-[#fb923c] text-gray-800 font-bold rounded-2xl'
-					>
-						<LogIn size={18} strokeWidth={3} /> Зарегистрироваться
-					</Hover>
-				</button>
+        <div
+          className='flex items-center justify-center gap-1 text-red-400 text-[12px]'
+          style={{minHeight: '20px'}}
+        >
+          {error && (
+            <>
+              <CircleAlert size={18} /> {error}
+            </>
+          )}
+        </div>
 
-				<Hover scale={1.05} className='text-center'>
-					<Link to='/login' className='text-[#fb923c] text-[13px]'>
-						Уже зарегистрирован?
-					</Link>
-				</Hover>
+        <div className='flex items-center justify-between px-1'>
+          <Hover scale={1.02} className='text-center'>
+            <Link to='/login' className='text-[#fb923c] text-[12px]'>
+              Уже зарегистрирован?
+            </Link>
+          </Hover>
 
-				<div
-					className='flex items-center justify-center gap-1 text-red-400 text-[12px]'
-					style={{ minHeight: '20px' }}
-				>
-					{error && (
-						<>
-							<CircleAlert size={18} /> {error}
-						</>
-					)}
-				</div>
-			</form>
-		</div>
-	);
+          <Hover scale={1.02} className='w-1/2'>
+            <IconButton
+              type='submit'
+              onClick={validateandLogIn}
+              className='ml-auto w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-gray-800 font-bold'
+            >
+              <LogIn size={18} strokeWidth={3} /> Отправить
+            </IconButton>
+          </Hover>
+        </div>
+      </form>
+
+      <FadeIn className='w-[75%] flex items-center'>
+        <Callout.Root>
+          <Callout.Icon>
+            <CircleAlert />
+          </Callout.Icon>
+          <Callout.Text className='text-[12px] leading-4'>
+            <motion.div
+              initial={{x: 0}}
+              animate={!islValid ? {x: [0, -3, 3, -3, 3, 0]} : {x: 0}}
+              transition={{duration: 0.5}}
+            >
+              Пароль должен содержать как минимум 8 элементов, заглавную букву,
+              цифру и спец сивол.
+            </motion.div>
+          </Callout.Text>
+        </Callout.Root>
+      </FadeIn>
+    </div>
+  );
 };
 
 export default RegisterStepOne;

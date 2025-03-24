@@ -1,44 +1,26 @@
-import { FadeIn, LeftToRight } from '@/shared/animations';
-import { Outlet, useLocation } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import {Code, Theme} from '@radix-ui/themes';
+import React, {useEffect, useState} from 'react';
 
-import { Header } from '@/components';
-import { Loader } from '@/shared/ui';
+import {FadeIn} from '@/shared/animations';
+import {Loader} from '@/shared/ui';
+import {Outlet} from 'react-router-dom';
+import axios from 'axios';
+import useThemeStore from '@/store/ui/ui-store';
 
-/**
- * The Layout component serves as the main structure of the application.
- * It initially displays a loading screen with an animated loader for 4 seconds,
- * after which it reveals the main content including a header, outlet for nested routes,
- * and a footer with creator information and a link to the GitHub repository.
- *
- * @returns {JSX.Element} The rendered Layout component.
- */
 const Layout: React.FC = () => {
   const [loader, setLoader] = useState<boolean>(true);
-  const currentRoute = useLocation();
+  const [version, setVersion] = useState<string>('');
 
-  // NOTE: пример подгрузки
-  /*const loadComponents = async () => {
-    try {
-      // Имитируем загрузку компонентов с задержкой
-      await Promise.all([
-        new Promise((resolve) => setTimeout(resolve, 2000)), // Загрузка Header
-        new Promise((resolve) => setTimeout(resolve, 3000)), // Загрузка Footer
-        new Promise((resolve) => setTimeout(resolve, 1000)), // Загрузка других компонентов
-      ]);
+  const theme = useThemeStore(state => state.theme);
 
-      setLoader(false); // Все компоненты загружены
-    } catch (error) {
-      console.error('Ошибка при загрузке компонентов:', error);
-      setLoader(false); // В случае ошибки всё равно скрываем лоадер
-    }
-  };*/
+  const getVersion = async () => {
+    const response = await axios.get(import.meta.env.VITE_GIT_REPO);
+    setVersion(response.data[0].tag_name);
+  };
 
-  // NOTE: Пока что эмулируем загрузу
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoader(false);
-    }, 4000);
+    getVersion();
+    const timeout = setTimeout(() => setLoader(false));
 
     return () => clearTimeout(timeout);
   }, []);
@@ -60,30 +42,31 @@ const Layout: React.FC = () => {
   }
 
   return (
-    <div>
-      {currentRoute.pathname === '/login' ||
-        currentRoute.pathname === '/register' ||
-        currentRoute.pathname === '*' ? null : (
-        <Header />
-      )}
+    <Theme
+      accentColor='amber'
+      grayColor='sand'
+      panelBackground='solid'
+      appearance={theme}
+      radius='medium'
+    >
+      <div>
+        <div className='w-full'>
+          <Outlet />
+        </div>
 
-      <div className='w-full'>
-        <Outlet />
-      </div>
-
-      <footer>
-        <LeftToRight className='h-[5vh] text-[13px] flex items-center justify-center gap-1'>
+        <footer className='h-[5vh] text-[13px] flex items-center justify-center gap-1'>
           <div className='flex items-center gap-1'>
             HookahBooking
             <FadeIn delay={1.5}>
-              <span className='font-bold text-orange-400'>
-                {import.meta.env.VITE_APP_VERSION}
-              </span>
+              <Code className='font-bold text-orange-400'>
+                {/* {import.meta.env.VITE_APP_VERSION} */}
+                {version ?? import.meta.env.VITE_APP_VERSION}
+              </Code>
             </FadeIn>
           </div>
-        </LeftToRight>
-      </footer>
-    </div>
+        </footer>
+      </div>
+    </Theme>
   );
 };
 
