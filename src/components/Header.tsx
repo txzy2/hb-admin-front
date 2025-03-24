@@ -9,7 +9,6 @@ import useAuthStore, {
 } from '@/store/auth/auth-store';
 
 import {ThemeSwitch} from '@/shared/ui';
-import axios from 'axios';
 import {useTheme} from '@/store/ui/ui-store';
 
 const Header: React.FC = () => {

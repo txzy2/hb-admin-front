@@ -15,9 +15,9 @@ body {
   font-family: 'Inter', 'Nunito', sans-serif;
 
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(78, 78, 78, 0.5)),
-    url('../../../public/bg.png');
+    url('/bg.svg');
   background-size: cover;
-  background-position: center; 
+  background-position: center;
 }
 
 a {

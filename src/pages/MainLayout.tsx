@@ -1,12 +1,14 @@
 import {FadeIn, Hover, LeftToRight} from '@/shared/animations';
+import React, {useRef} from 'react';
 
 import {Flex} from '@radix-ui/themes';
+import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Link} from 'react-router-dom';
-import React, {useRef} from 'react';
 import {list} from '@/shared/constants/links';
-import {ChevronDown} from 'lucide-react';
+import {useTranslation} from 'react-i18next';
 
 const MainLayout: React.FC = () => {
+  const {t} = useTranslation();
   const nextSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToNextSection = () => {
@@ -17,50 +19,28 @@ const MainLayout: React.FC = () => {
 
   return (
     <div className=''>
-      <nav className='fixed right-20 h-[10vh] flex items-center uppercase'>
-        <ul className='flex items-center gap-2 bg-white text-black pt-3 px-2 tracking-[-2px] text-[20px]'>
-          {list.map(({title, link}, i) => (
-            <li key={i} className='hover:underline leading-none'>
-              <Hover scale={1.02}>
-                <Link to={link} className='font-bold'>
-                  {title}
-                </Link>
-              </Hover>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className='bg'>
+        <div className='h-[10vh] flex items-center justify-end me-20 gap-4 uppercase'>
+          <nav>
+            <ul className='flex items-center gap-2 bg-white text-black pt-3 px-2 tracking-[-2px] text-[20px]'>
+              {list.map(({titleKey, link}, i: number) => (
+                <li key={i} className='hover:underline leading-none'>
+                  <Hover scale={1.02}>
+                    <Link to={link} className='font-bold'>
+                      {t(titleKey)}
+                    </Link>
+                  </Hover>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-      <FadeIn className='h-screen flex flex-col justify-between items-center select-none'>
-        <Flex className='w-full flex-col text-[60px] md:px-20 px-40 py-0 flex-grow justify-center'>
-          <h1 className='leading-none'>
-            <Link
-              to='/register'
-              className='group tracking-[-10px] uppercase font-bold'
-            >
-              <Flex
-                gap={'5'}
-                className='transition-all duration-200 hover:text-[#C3073F]'
-              >
-                <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                  Подключи
-                </span>
-                <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                  свою
-                </span>
-                <span className='group-hover:tracking-[2px] transition-all duration-200'>
-                  организацию
-                </span>
-              </Flex>
-            </Link>
-          </h1>
+          <LanguageSwitcher />
+        </div>
 
-          <div className='leading-none text-[45px] italic text-[#C3073F]'>
-            или
-          </div>
-
-          <LeftToRight>
-            <h1 className='leading-none'>
+        <div className='h-[90vh] flex flex-col justify-between items-center select-none'>
+          <FadeIn className='w-full flex flex-col text-[55px] md:px-20 px-40 py-0 flex-grow justify-center'>
+            <h2 className='leading-none'>
               <Link
                 to='/register'
                 className='group tracking-[-8px] uppercase font-bold'
@@ -70,35 +50,59 @@ const MainLayout: React.FC = () => {
                   className='transition-all duration-200 hover:text-[#C3073F]'
                 >
                   <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                    Забронируй
+                    {t('main.connect.first')}
                   </span>
                   <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                    свой
+                    {t('main.connect.second')}
                   </span>
                   <span className='group-hover:tracking-[2px] transition-all duration-200'>
-                    кальян
+                    {t('main.connect.third')}
                   </span>
                 </Flex>
               </Link>
-            </h1>
-          </LeftToRight>
-        </Flex>
-        {/* 
-      <Flex>
-        <h2 className='text-[32px]'>Наши партнеры</h2>
-      </Flex> */}
+            </h2>
 
-        <div className='mb-4'>
-          <Hover scale={1.1} className='cursor-pointer'>
-            <ChevronDown size={30} className='' onClick={scrollToNextSection} />
-          </Hover>
+            <div className='leading-none text-[45px] italic text-[#C3073F]'>
+              {t('main.or')}
+            </div>
+
+            <LeftToRight>
+              <h2 className='leading-none'>
+                <Link
+                  to='/register'
+                  className='group tracking-[-8px] uppercase font-bold'
+                >
+                  <Flex
+                    gap={'5'}
+                    className='transition-all duration-200 hover:text-[#C3073F]'
+                  >
+                    <span className='group-hover:tracking-[-4px] transition-all duration-200'>
+                      {t('main.book.first')}
+                    </span>
+                    <span className='group-hover:tracking-[0px] transition-all duration-200'>
+                      {t('main.book.second')}
+                    </span>
+                    <span className='group-hover:tracking-[2px] transition-all duration-200'>
+                      {t('main.book.third')}
+                    </span>
+                  </Flex>
+                </Link>
+              </h2>
+            </LeftToRight>
+          </FadeIn>
+
+          <button
+            className='mb-4 text-[20px] px-6 font-normal uppercase border border-white'
+            onClick={scrollToNextSection}
+          >
+            {t('main.about')}
+          </button>
         </div>
-      </FadeIn>
-
-      <div ref={nextSectionRef} className='h-[95vh]'>
-        {/* Контент следующего контейнера */}
-        <h2>Это следующий контейнер</h2>
       </div>
+
+      {/* <div ref={nextSectionRef} className='h-[95vh]'>
+        <div>Это следующий контейнер</div>
+      </div> */}
     </div>
   );
 };

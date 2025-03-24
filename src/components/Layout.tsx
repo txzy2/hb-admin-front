@@ -1,9 +1,9 @@
 import {Code, Theme} from '@radix-ui/themes';
-import {FadeIn} from '@/shared/animations';
-import {Outlet, useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
+import {FadeIn} from '@/shared/animations';
 import {Loader} from '@/shared/ui';
+import {Outlet} from 'react-router-dom';
 import axios from 'axios';
 import useThemeStore from '@/store/ui/ui-store';
 
@@ -11,7 +11,6 @@ const Layout: React.FC = () => {
   const [loader, setLoader] = useState<boolean>(true);
   const [version, setVersion] = useState<string>('');
 
-  const currentRoute = useLocation();
   const theme = useThemeStore(state => state.theme);
 
   const getVersion = async () => {
@@ -49,7 +48,6 @@ const Layout: React.FC = () => {
       panelBackground='solid'
       appearance={theme}
       radius='medium'
-      className={`${currentRoute.pathname === '/' ? 'bg' : ''}`}
     >
       <div>
         <div className='w-full'>

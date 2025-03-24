@@ -14,7 +14,6 @@ const Register: React.FC = () => {
   const [error, setError] = useState<string | boolean>();
   const [step, setStep] = useState<number>(1);
 
-  // const navigate = useNavigate();
   const login = useAuthStore(state => state.login);
 
   const validateandLogIn = (event: React.MouseEvent) => {
@@ -34,8 +33,6 @@ const Register: React.FC = () => {
       validateData.validPass &&
       validateData.validRetypePass
     ) {
-      // navigate('/');
-
       login('1234', email);
 
       setStep(2);

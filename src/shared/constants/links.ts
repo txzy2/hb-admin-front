@@ -1,6 +1,6 @@
-export const list: {title: string; link: string}[] = [
-  {title: 'Главная', link: '/'},
-  {title: 'Список заведений', link: '/'},
-  {title: 'Контакты', link: '/'},
-  {title: 'Войти', link: '/login'}
+export const list = [
+  {titleKey: 'nav.main', link: '/'},
+  {titleKey: 'nav.list', link: '/'},
+  {titleKey: 'nav.contacts', link: '/'},
+  {titleKey: 'nav.logIn', link: '/login'}
 ];
