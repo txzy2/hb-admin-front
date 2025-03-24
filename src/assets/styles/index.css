@@ -17,7 +17,7 @@ body {
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(78, 78, 78, 0.5)),
     url('../../../public/bg.png');
   background-size: cover;
-  background-position: center;
+  background-position: center; 
 }
 
 a {

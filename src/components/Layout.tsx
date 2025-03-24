@@ -1,9 +1,8 @@
 import {Code, Theme} from '@radix-ui/themes';
-import {FadeIn, FallingStars, LeftToRight} from '@/shared/animations';
+import {FadeIn} from '@/shared/animations';
 import {Outlet, useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
-import {Header} from '@/components';
 import {Loader} from '@/shared/ui';
 import axios from 'axios';
 import useThemeStore from '@/store/ui/ui-store';
@@ -53,12 +52,6 @@ const Layout: React.FC = () => {
       className={`${currentRoute.pathname === '/' ? 'bg' : ''}`}
     >
       <div>
-        {currentRoute.pathname === '/login' ||
-        currentRoute.pathname === '/register' ||
-        currentRoute.pathname === '*' ? null : (
-          <Header />
-        )}
-
         <div className='w-full'>
           <Outlet />
         </div>
@@ -69,7 +62,7 @@ const Layout: React.FC = () => {
             <FadeIn delay={1.5}>
               <Code className='font-bold text-orange-400'>
                 {/* {import.meta.env.VITE_APP_VERSION} */}
-                {version ?? 'null'}
+                {version ?? import.meta.env.VITE_APP_VERSION}
               </Code>
             </FadeIn>
           </div>
