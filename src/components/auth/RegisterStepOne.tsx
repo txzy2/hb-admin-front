@@ -1,5 +1,4 @@
 import {Callout, IconButton, TextField} from '@radix-ui/themes';
-
 import {
   CircleAlert,
   Eye,
@@ -9,13 +8,13 @@ import {
   LogIn,
   User2
 } from 'lucide-react';
-
 import {FadeIn, Hover} from '@/shared/animations';
+
 import {Link} from 'react-router-dom';
 import React from 'react';
-import {motion} from 'framer-motion';
 
 interface StepOneProps {
+  username: string;
   email: string;
   password: string;
   passwordRetype: string;
@@ -23,6 +22,7 @@ interface StepOneProps {
   islValid: boolean;
   error?: string | boolean;
   setEmail: (value: string) => void;
+  setUsername: (value: string) => void;
   setPassword: (value: string) => void;
   setPasswordRetype: (value: string) => void;
   setShowPassword: (value: boolean) => void;
@@ -32,6 +32,7 @@ interface StepOneProps {
 }
 
 const RegisterStepOne: React.FC<StepOneProps> = ({
+  username,
   email,
   password,
   passwordRetype,
@@ -39,6 +40,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
   islValid,
   error,
   setEmail,
+  setUsername,
   setPassword,
   setPasswordRetype,
   setShowPassword,
@@ -55,6 +57,23 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
       </FadeIn>
 
       <form className='w-[80%] xl:w-1/2 flex flex-col gap-3 text-[14px]'>
+        <TextField.Root
+          className={`w-full text-[13px]`}
+          type='text'
+          placeholder='ФИО'
+          maxLength={35}
+          value={username}
+          onChange={e => {
+            setUsername(e.target.value);
+            setError('');
+            setIslValid(true);
+          }}
+        >
+          <TextField.Slot>
+            <User2 size={20} color={`${!islValid ? '#f87171' : '#fb923c'}`} />
+          </TextField.Slot>
+        </TextField.Root>
+
         <TextField.Root
           className={`w-full text-[13px]`}
           type='email'
@@ -168,14 +187,8 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
             <CircleAlert />
           </Callout.Icon>
           <Callout.Text className='text-[12px] leading-4'>
-            <motion.div
-              initial={{x: 0}}
-              animate={!islValid ? {x: [0, -3, 3, -3, 3, 0]} : {x: 0}}
-              transition={{duration: 0.5}}
-            >
-              Пароль должен содержать как минимум 8 элементов, заглавную букву,
-              цифру и спец сивол.
-            </motion.div>
+            Пароль должен содержать как минимум 8 элементов, заглавную букву,
+            цифру и спец сивол.
           </Callout.Text>
         </Callout.Root>
       </FadeIn>

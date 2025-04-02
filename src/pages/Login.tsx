@@ -5,6 +5,8 @@ import React, {useEffect, useState} from 'react';
 import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
+import {LoginCore} from '@/shared/lib/auth/login';
+import {LoginReturnType} from '@/shared/types/storage.types';
 import Validator from '@/shared/lib/validator';
 
 const Login: React.FC = () => {
@@ -25,21 +27,30 @@ const Login: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const validateandLogIn = (event: React.MouseEvent) => {
+  const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
 
     const validator = new Validator({email, password});
     const validateData = validator.validate();
 
-    if (
-      validateData.validEmail &&
-      validateData.validPass &&
-      email === 'kamaeff2@gmail.com' &&
-      password === 'kal%08Py'
-    ) {
-      login('1234', email);
-      navigate('/panel');
-      console.log('Успешный вход');
+    if (validateData.validEmail && validateData.validPass) {
+      const loginCore = new LoginCore({email, password});
+      const tryLogInRequest = await loginCore.sendLogInRequest();
+
+      if (tryLogInRequest.jwt) {
+        const tryLogin: LoginReturnType = await login({
+          jwt: tryLogInRequest.jwt,
+          email
+        });
+
+        if (!tryLogin.status) {
+          setError(tryLogin.message);
+          return;
+        }
+
+        navigate('/panel');
+        console.log('Успешный вход');
+      }
     } else {
       setError(
         validateData.validateInputs === true

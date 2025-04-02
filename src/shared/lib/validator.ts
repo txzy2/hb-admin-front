@@ -7,11 +7,13 @@ import {
 
 export default class Validator {
   private email: string;
+  private username: string;
   private password: string;
   private passwordRetype: string;
 
   constructor(data: ValidateTypes) {
     this.email = data.email;
+    this.username = data.username || '';
     this.password = data.password;
     this.passwordRetype = data.passwordRetype || '';
   }
@@ -67,6 +69,7 @@ export default class Validator {
 
     return {
       validEmail: this.validateEmail(),
+      validUsername: inputValidation.isValid,
       validPass: passwordValidation.isValidPass,
       validRetypePass: passwordValidation.isValidRetype,
       validateInputs: inputValidation.isValid ? true : inputValidation.message
