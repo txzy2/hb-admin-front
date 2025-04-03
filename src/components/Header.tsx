@@ -140,7 +140,9 @@ const Header: React.FC = () => {
               </Hover>
             </Flex>
           </Dialog.Title>
-          <Dialog.Description>Тут будет профиль</Dialog.Description>
+          <Dialog.Description>
+            TODO: добавить DATA LIST из radix
+          </Dialog.Description>
         </Dialog.Content>
       </Dialog.Root>
     </div>

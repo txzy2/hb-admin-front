@@ -1,4 +1,4 @@
-import {Callout, IconButton, TextField} from '@radix-ui/themes';
+import {Callout, Flex, IconButton, TextField} from '@radix-ui/themes';
 import {
   CircleAlert,
   Eye,
@@ -10,8 +10,10 @@ import {
 } from 'lucide-react';
 import {FadeIn, Hover} from '@/shared/animations';
 
+import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Link} from 'react-router-dom';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 interface StepOneProps {
   username: string;
@@ -48,19 +50,19 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
   setIslValid,
   validateandLogIn
 }) => {
+  const {t} = useTranslation();
+
   return (
     <div className='flex flex-col items-center gap-7'>
-      <FadeIn>
-        <a href='/'>
-          <img src='/logo.png' alt='loginLogo' width={230} />
-        </a>
-      </FadeIn>
+      <a href='/'>
+        <img src='/logo.png' alt='loginLogo' width={230} />
+      </a>
 
-      <form className='w-[80%] xl:w-1/2 flex flex-col gap-3 text-[14px]'>
+      <form className='w-[80%] xl:w-[60%] flex flex-col gap-3 text-[14px]'>
         <TextField.Root
           className={`w-full text-[13px]`}
           type='text'
-          placeholder='ФИО'
+          placeholder={t('register.fullName')}
           maxLength={35}
           value={username}
           onChange={e => {
@@ -77,7 +79,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <TextField.Root
           className={`w-full text-[13px]`}
           type='email'
-          placeholder='Электронная почта'
+          placeholder={t('register.email')}
           maxLength={30}
           value={email}
           onChange={e => {
@@ -94,7 +96,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <TextField.Root
           className={`w-full text-[13px]`}
           type={showPassword ? 'text' : 'password'}
-          placeholder='Пароль'
+          placeholder={t('register.password')}
           maxLength={24}
           value={password}
           onChange={e => {
@@ -112,7 +114,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
           className={`w-full text-[13px]`}
           type={showPassword ? 'text' : 'password'}
           maxLength={24}
-          placeholder={'Повторите пароль'}
+          placeholder={t('register.retype')}
           value={passwordRetype}
           onChange={e => {
             setPasswordRetype(e.target.value);
@@ -165,7 +167,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <div className='flex items-center justify-between px-1'>
           <Hover scale={1.02} className='text-center'>
             <Link to='/login' className='text-[#fb923c] text-[12px]'>
-              Уже зарегистрирован?
+              {t('register.question')}
             </Link>
           </Hover>
 
@@ -175,23 +177,23 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
               onClick={validateandLogIn}
               className='ml-auto w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-gray-800 font-bold'
             >
-              <LogIn size={18} strokeWidth={3} /> Отправить
+              <LogIn size={18} strokeWidth={3} />
+              {t('register.send')}
             </IconButton>
           </Hover>
         </div>
       </form>
 
-      <FadeIn className='w-[75%] flex items-center'>
+      <div className='w-[75%] flex items-center'>
         <Callout.Root>
           <Callout.Icon>
             <CircleAlert />
           </Callout.Icon>
           <Callout.Text className='text-[12px] leading-4'>
-            Пароль должен содержать как минимум 8 элементов, заглавную букву,
-            цифру и спец сивол.
+            {t('register.anatation')}
           </Callout.Text>
         </Callout.Root>
-      </FadeIn>
+      </div>
     </div>
   );
 };

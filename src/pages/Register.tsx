@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {LoginReturnType} from '@/shared/types/storage.types';
 import {RegisterCore} from '@/shared/lib/auth/register';
 import RegisterStepOne from '@/components/auth/RegisterStepOne';
+import RegisterStepTwo from '@/components/auth/RegisterStepTwo';
 import Validator from '@/shared/lib/validator';
 import useAuthStore from '@/store/auth/auth-store';
 
@@ -14,9 +15,17 @@ const Register: React.FC = () => {
   const [passwordRetype, setPasswordRetype] = useState<string>('');
   const [islValid, setIslValid] = useState<boolean>(true);
   const [error, setError] = useState<string | boolean>();
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(() => {
+    const savedStep = localStorage.getItem('currentStep');
+    return savedStep ? parseInt(savedStep) : 1;
+  });
 
   const login = useAuthStore(state => state.login);
+
+  const setStepAndSave = (newStep: number) => {
+    setStep(newStep);
+    localStorage.setItem('currentStep', newStep.toString());
+  };
 
   const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -50,7 +59,7 @@ const Register: React.FC = () => {
           return;
         }
 
-        setStep(2);
+        setStepAndSave(2);
       }
 
       setError(sendRegisterRequest.message);
@@ -86,7 +95,7 @@ const Register: React.FC = () => {
           validateandLogIn={validateandLogIn}
         />
       ) : (
-        <>step 2</>
+        <RegisterStepTwo setStepRegister={setStepAndSave} />
       )}
     </div>
   );

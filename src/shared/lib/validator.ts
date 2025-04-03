@@ -10,10 +10,14 @@ export default class Validator {
   private password: string;
   private passwordRetype: string;
 
-  constructor(data: ValidateTypes) {
+  private t: any;
+
+  constructor(data: ValidateTypes, t: any) {
     this.email = data.email;
     this.password = data.password;
     this.passwordRetype = data.passwordRetype || '';
+
+    this.t = t;
   }
 
   private validatePassword(): PasswordValidateReturnType {
@@ -35,19 +39,19 @@ export default class Validator {
     const validations: ValidationConditionsType[] = [
       {
         condition: !this.email.trim(),
-        message: 'Поле email не может быть пустым'
+        message: this.t('validator.email')
       },
       {
         condition: !this.password.trim(),
-        message: 'Поле пароль не может быть пустым'
+        message: this.t('validator.password')
       },
       {
         condition: this.password.length < 8,
-        message: 'Пароль должен быть больше 8 символов'
+        message: this.t('validator.least8')
       },
       {
         condition: this.passwordRetype && this.passwordRetype !== this.password,
-        message: 'Введенные пароли не совпадают'
+        message: this.t('validator.passwordDontSame')
       }
     ];
 

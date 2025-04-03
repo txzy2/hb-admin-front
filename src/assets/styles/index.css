@@ -25,6 +25,14 @@ a {
   text-decoration: inherit;
 }
 
+.drop_area {
+  border: 2px dashed #fb923c !important;
+
+  svg path {
+    fill: #fb923c;
+  }
+}
+
 @media (max-width: 768px) {
   .about {
     flex-direction: column;

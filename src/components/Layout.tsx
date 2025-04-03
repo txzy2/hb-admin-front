@@ -1,8 +1,8 @@
 import {Code, Theme} from '@radix-ui/themes';
-import {FadeIn} from '@/shared/animations';
 import {Outlet, useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
+import {FadeIn} from '@/shared/animations';
 import {Loader} from '@/shared/ui';
 import useThemeStore from '@/store/ui/ui-store';
 
@@ -53,7 +53,6 @@ const Layout: React.FC = () => {
             HookahBooking
             <FadeIn delay={1.5}>
               <Code className='font-bold text-orange-400'>
-                {/* {import.meta.env.VITE_APP_VERSION} */}
                 {import.meta.env.VITE_APP_VERSION}
               </Code>
             </FadeIn>
