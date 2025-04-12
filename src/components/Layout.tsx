@@ -1,9 +1,9 @@
-import {Code, Theme} from '@radix-ui/themes';
 import {Outlet, useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 
 import {FadeIn} from '@/shared/animations';
 import {Loader} from '@/shared/ui';
+import {Theme} from '@radix-ui/themes';
 import useThemeStore from '@/store/ui/ui-store';
 
 const Layout: React.FC = () => {
