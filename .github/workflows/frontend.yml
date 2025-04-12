@@ -3,7 +3,7 @@ name: Frontend Deployment
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-and-deploy:
@@ -18,11 +18,11 @@ jobs:
         # Создаем .ssh директорию
         mkdir -p ~/.ssh
         chmod 700 ~/.ssh
-        
+
         # Записываем приватный ключ в файл
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
-        
+
         # Добавляем хост в known_hosts (чтобы избежать вопроса о доверии)
         ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
