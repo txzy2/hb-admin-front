@@ -32,5 +32,5 @@ jobs:
       - name: Copy project via rsync
         run: |
           rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            ./dist/ \ 
+            ./dist \ 
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.PROJECT_PATH }}
