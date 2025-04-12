@@ -11,24 +11,24 @@ jobs:
 
   steps:
     - name: Install rsync and ssh
-          run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
+      run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
 
-        - name: Setup SSH key
-          run: |
-            # Создаем .ssh директорию
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
-            
-            # Записываем приватный ключ в файл
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-            chmod 600 ~/.ssh/deploy_key
-            
-            # Добавляем хост в known_hosts (чтобы избежать вопроса о доверии)
-            ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+    - name: Setup SSH key
+      run: |
+        # Создаем .ssh директорию
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        
+        # Записываем приватный ключ в файл
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        
+        # Добавляем хост в known_hosts (чтобы избежать вопроса о доверии)
+        ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
     - name: Copy project via rsync
-          run: |
-            rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-              --exclude='.git/' \
-              --exclude='.github/' \
-              . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.PROJECT_PATH }}
+      run: |
+        rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+          --exclude='.git/' \
+          --exclude='.github/' \
+          . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.PROJECT_PATH }}
