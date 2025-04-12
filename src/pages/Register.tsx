@@ -6,6 +6,7 @@ import RegisterStepOne from '@/components/auth/RegisterStepOne';
 import RegisterStepTwo from '@/components/auth/RegisterStepTwo';
 import Validator from '@/shared/lib/validator';
 import useAuthStore from '@/store/auth/auth-store';
+import { useTranslation } from 'react-i18next';
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -21,6 +22,7 @@ const Register: React.FC = () => {
   });
 
   const login = useAuthStore(state => state.login);
+  const t = useTranslation();
 
   const setStepAndSave = (newStep: number) => {
     setStep(newStep);
@@ -35,7 +37,7 @@ const Register: React.FC = () => {
       username,
       password,
       passwordRetype
-    });
+    }, t);
     const validateData = validator.validate();
 
     if (

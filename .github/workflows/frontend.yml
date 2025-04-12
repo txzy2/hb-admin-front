@@ -1,0 +1,36 @@
+name: Frontend Deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install rsync and ssh
+        run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
+
+      - name: Setup SSH key
+        run: |
+          # Создаем .ssh директорию
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          
+          # Записываем приватный ключ в файл
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          
+          # Добавляем хост в known_hosts (чтобы избежать вопроса о доверии)
+          ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy project via rsync
+        run: |
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./dist/ \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.PROJECT_PATH }}/
