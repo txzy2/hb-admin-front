@@ -5,6 +5,7 @@ import {LogOut, User2, X} from 'lucide-react';
 import React, {useEffect, useState} from 'react';
 import useAuthStore, {
   useAuthEmail,
+  useAuthUsername,
   useIsAuthenticated
 } from '@/store/auth/auth-store';
 
@@ -18,6 +19,7 @@ const Header: React.FC = () => {
 
   const isAuthenticated = useIsAuthenticated();
   const email = useAuthEmail();
+  const username = useAuthUsername();
   const logout = useAuthStore(state => state.logout);
   const theme = useTheme();
 
@@ -70,6 +72,7 @@ const Header: React.FC = () => {
         {isAuthenticated ? (
           <div className='flex items-center gap-3 text-[16px]'>
             <ThemeSwitch />
+
             <DropdownMenu.Root>
               <DropdownMenu.Trigger
                 title='Профиль'
@@ -78,7 +81,7 @@ const Header: React.FC = () => {
                 } outline-none`}
               >
                 <Button variant='soft'>
-                  {email}
+                  {username ?? email}
                   <DropdownMenu.TriggerIcon />
                 </Button>
               </DropdownMenu.Trigger>
@@ -88,6 +91,7 @@ const Header: React.FC = () => {
                   <DropdownMenu.Item
                     className='cursor-pointer'
                     shortcut='Ctrl+Shift+E'
+                    onClick={() => setIsDialogOpen(true)}
                   >
                     <User2 size={16} /> Профиль
                   </DropdownMenu.Item>
@@ -120,8 +124,12 @@ const Header: React.FC = () => {
               justify={'between'}
               className={theme === 'light' ? 'text-black' : 'text-white'}
             >
-              {email}
-
+              <div className='flex gap-1'>
+                {username ?? ''}{' '}
+                <span className='text-[16px] font-normal'>
+                  {username ? '(' + email + ')' : email}
+                </span>
+              </div>
               <Hover scale={1.02}>
                 <Button
                   className='bg-transparent cursor-pointer p-0 outline-none'
@@ -132,7 +140,9 @@ const Header: React.FC = () => {
               </Hover>
             </Flex>
           </Dialog.Title>
-          <Dialog.Description>Тут будет профиль</Dialog.Description>
+          <Dialog.Description>
+            TODO: добавить DATA LIST из radix
+          </Dialog.Description>
         </Dialog.Content>
       </Dialog.Root>
     </div>

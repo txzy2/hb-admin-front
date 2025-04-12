@@ -1,11 +1,16 @@
 import {CircleAlert, Eye, EyeOff, Lock, LogIn, User2} from 'lucide-react';
+import {Form, Link, useNavigate} from 'react-router-dom';
 import {IconButton, TextField} from '@radix-ui/themes';
-import {Link, useNavigate} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
+import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
+import {Loader} from '@/shared/ui';
+import {LoginCore} from '@/shared/lib/auth/login';
+import {LoginReturnType} from '@/shared/types/storage.types';
 import Validator from '@/shared/lib/validator';
+import {useTranslation} from 'react-i18next';
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -15,9 +20,13 @@ const Login: React.FC = () => {
   const [islValid, setIslValid] = useState<boolean>(true);
   const [error, setError] = useState<string | boolean>();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const login = useAuthStore(state => state.login);
   const isAuthenticated = useIsAuthenticated();
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,21 +34,32 @@ const Login: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const validateandLogIn = (event: React.MouseEvent) => {
+  const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
+    setIsLoading(true);
 
-    const validator = new Validator({email, password});
+    const validator = new Validator({email, password}, t);
     const validateData = validator.validate();
 
-    if (
-      validateData.validEmail &&
-      validateData.validPass &&
-      email === 'kamaeff2@gmail.com' &&
-      password === 'kal%08Py'
-    ) {
-      login('1234', email);
-      navigate('/panel');
-      console.log('Успешный вход');
+    if (validateData.validEmail && validateData.validPass) {
+      const loginCore = new LoginCore({email, password});
+      const tryLogInRequest = await loginCore.sendLogInRequest();
+
+      if (tryLogInRequest.jwt) {
+        const tryLogin: LoginReturnType = await login({
+          jwt: tryLogInRequest.jwt,
+          email
+        });
+
+        if (!tryLogin.status) {
+          setError(tryLogin.message);
+          setIsLoading(false);
+          return;
+        }
+
+        navigate('/panel');
+        console.log('Успешный вход');
+      }
     } else {
       setError(
         validateData.validateInputs === true
@@ -47,20 +67,20 @@ const Login: React.FC = () => {
           : validateData.validateInputs
       );
     }
+    setIsLoading(false);
   };
 
   return (
     <div className='h-[95vh] flex flex-col items-center justify-center gap-5'>
       <a href='/'>
-        {/* <img src='/LogoLight.png' alt='loginLogo' width={230} /> */}
         <img src='/logo.png' alt='loginLogo' width={230} />
       </a>
 
-      <form className='w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-5 text-[14px]'>
+      <Form className='w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-3 text-[14px]'>
         <TextField.Root
           className={`w-full text-[13px]`}
           type='email'
-          placeholder='Электронная почта'
+          placeholder={t('logIn.email')}
           maxLength={30}
           value={email}
           onChange={e => {
@@ -77,7 +97,7 @@ const Login: React.FC = () => {
         <TextField.Root
           className={`text-[13px]`}
           type={showPassword ? 'text' : 'password'}
-          placeholder='Пароль'
+          placeholder={t('logIn.password')}
           maxLength={24}
           value={password}
           onChange={e => {
@@ -115,19 +135,31 @@ const Login: React.FC = () => {
         </TextField.Root>
 
         <div className='flex flex-col items-center justify-between gap-2'>
-          <Hover scale={1.02} className='w-full'>
-            <IconButton
-              type='submit'
-              onClick={validateandLogIn}
-              className='w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-black font-bold'
-            >
-              <LogIn size={18} strokeWidth={3} /> Войти
-            </IconButton>
-          </Hover>
+          <div className='w-full flex items-center gap-2'>
+            <Hover scale={1.02} className='w-full'>
+              <IconButton
+                type='submit'
+                onClick={validateandLogIn}
+                className='w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-black font-bold'
+              >
+                {isLoading ? (
+                  <Loader title={{need: false}} />
+                ) : (
+                  <>
+                    <LogIn size={18} strokeWidth={3} /> {t('logIn.enter')}
+                  </>
+                )}
+              </IconButton>
+            </Hover>
+
+            <LanguageSwitcher
+              text={{size: 13, color: '#fff', hoverColor: '#fb923c'}}
+            />
+          </div>
 
           <Hover scale={1.05}>
             <Link to='/register' className='text-[#fb923c] text-[13px]'>
-              Еще нет аккаунта?
+              {t('logIn.question')}
             </Link>
           </Hover>
         </div>
@@ -142,7 +174,7 @@ const Login: React.FC = () => {
             </>
           )}
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

@@ -8,12 +8,14 @@ export interface DefaultAnimationsProps {
 
 export type ValidateTypes = {
   email: string;
+  username?: string;
   password: string;
   passwordRetype?: string;
 };
 
 export type ValidateReturnTypes = {
   validEmail: boolean;
+  validUsername: boolean;
   validPass: boolean;
   validRetypePass?: boolean;
   validateInputs?: boolean | string;
