@@ -47,17 +47,6 @@ const Layout: React.FC = () => {
         <div className='w-full'>
           <Outlet />
         </div>
-
-        <footer className='h-[5vh] text-[13px] flex items-center justify-center gap-1'>
-          <div className='flex items-center gap-1'>
-            HookahBooking
-            <FadeIn delay={1.5}>
-              <Code className='font-bold text-orange-400'>
-                {import.meta.env.VITE_APP_VERSION}
-              </Code>
-            </FadeIn>
-          </div>
-        </footer>
       </div>
     </Theme>
   );
