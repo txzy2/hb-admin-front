@@ -1,4 +1,4 @@
-import {Callout, Flex, IconButton, TextField} from '@radix-ui/themes';
+import {Callout, IconButton, TextField} from '@radix-ui/themes';
 import {
   CircleAlert,
   Eye,
@@ -8,9 +8,8 @@ import {
   LogIn,
   User2
 } from 'lucide-react';
-import {FadeIn, Hover} from '@/shared/animations';
 
-import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
+import {Hover} from '@/shared/animations';
 import {Link} from 'react-router-dom';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
