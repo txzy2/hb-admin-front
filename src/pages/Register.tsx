@@ -22,7 +22,7 @@ const Register: React.FC = () => {
   });
 
   const login = useAuthStore(state => state.login);
-  const t = useTranslation();
+  const {t} = useTranslation();
 
   const setStepAndSave = (newStep: number) => {
     setStep(newStep);
