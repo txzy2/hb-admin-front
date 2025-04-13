@@ -1,9 +1,10 @@
+import * as CryptoJS from 'crypto-js';
+
 import {
   JWTResponse,
   LogInPersonInputData
 } from '@/shared/types/auth/auth.types';
 
-import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
 const getEnvVar = (name: string): string => {
@@ -31,50 +32,35 @@ export class LoginCore {
 
   private hashPassword = () => {
     try {
-      if (!CryptoJS || !CryptoJS.HmacSHA256) {
-        throw new Error('CryptoJS is not properly initialized');
-      }
+      if (!this.salt) throw new Error('Salt is not defined');
+      if (!this.password) throw new Error('Password is not defined');
       
-      const hash = CryptoJS.HmacSHA256(
-        this.password,
-        this.salt
-      );
-      
-      if (!hash) {
-        throw new Error('Failed to generate hash');
-      }
-      
-      return hash.toString(CryptoJS.enc.Hex);
+      const salt = CryptoJS.enc.Utf8.parse(this.salt);
+      return CryptoJS.HmacSHA256(this.password, salt).toString(CryptoJS.enc.Hex);
     } catch (error) {
-      console.error('Hash error:', error);
-      throw new Error('Failed to hash password');
+      console.error('Hashing error:', error);
+      throw new Error('Password hashing failed');
     }
   };
 
   private collectData = () => {
-    try {
-      return {
-        email: this.email,
-        password: this.hashPassword()
-      };
-    } catch (error) {
-      console.error('Data collection error:', error);
-      throw error;
-    }
+    return {
+      email: this.email,
+      password: this.hashPassword()
+    };
   };
 
   public async sendLogInRequest(): Promise<JWTResponse> {
     try {
-      const data = this.collectData();
       const response = await axios.post(
         `${this.apiUrl}/sso/login`,
-        data,
+        this.collectData(),
         {headers: {'X-Auth-Token': this.ssoToken}}
       );
 
       return response.data;
     } catch (error: unknown) {
-      console.error('Login request error:', error);
+      console.log(error);
       return {
         error: true,
         message: `Ошибка авторизации: ${
@@ -86,3 +72,4 @@ export class LoginCore {
     }
   }
 }
+
