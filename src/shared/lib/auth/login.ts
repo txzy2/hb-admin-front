@@ -1,10 +1,9 @@
-import * as CryptoJS from 'crypto-js';
-
 import {
   JWTResponse,
   LogInPersonInputData
 } from '@/shared/types/auth/auth.types';
 
+import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
 const getEnvVar = (name: string): string => {
@@ -30,7 +29,7 @@ export class LoginCore {
     this.ssoToken = getEnvVar('VITE_SSO_TOKEN');
   }
 
-  private hashPassword = async () => {
+  private hashPassword = async (): Promise<string> => {
     try {
       if (!this.salt) throw new Error('Salt is not defined');
       if (!this.password) throw new Error('Password is not defined');
@@ -43,7 +42,7 @@ export class LoginCore {
     }
   };
 
-  private collectData = async () => {
+  private collectData = async (): Promise<LogInPersonInputData> => {
     return {
       email: this.email,
       password: await this.hashPassword()
@@ -51,10 +50,13 @@ export class LoginCore {
   };
 
   public async sendLogInRequest(): Promise<JWTResponse> {
+    const data = await this.collectData();
+    console.log(data);
+    
     try {
       const response = await axios.post(
         `${this.apiUrl}/sso/login`,
-        await this.collectData(),
+        data,
         {headers: {'X-Auth-Token': this.ssoToken}}
       );
 
