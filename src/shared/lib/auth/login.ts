@@ -1,5 +1,3 @@
-import * as CryptoJS from 'crypto-js';
-
 import {
   JWTResponse,
   LogInPersonInputData
@@ -16,39 +14,57 @@ export class LoginCore {
     this.password = password;
   }
 
-  private hashPassword = () => {
-    return CryptoJS.HmacSHA256(
-      this.password,
-      import.meta.env.VITE_SALT
-    ).toString(CryptoJS.enc.Hex);
-  };
+  private async hashPassword(): Promise<string> {
+    if (!window.crypto?.subtle) {
+      throw new Error("Web Crypto API is not available");
+    }
 
-  private collectData = () => {
+    const encoder = new TextEncoder();
+    const keyMaterial = await window.crypto.subtle.importKey(
+      'raw',
+      encoder.encode(import.meta.env.VITE_SALT),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    const signature = await window.crypto.subtle.sign(
+      'HMAC',
+      keyMaterial,
+      encoder.encode(this.password)
+    );
+
+    return Array.from(new Uint8Array(signature))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  private async collectData() {
     return {
       email: this.email,
-      password: this.hashPassword()
+      password: await this.hashPassword()
     };
-  };
+  }
 
   public async sendLogInRequest(): Promise<JWTResponse> {
     try {
+      const data = await this.collectData();
       const response = await axios.post(
         import.meta.env.VITE_API_SSO + '/sso/login',
-        this.collectData(),
+        data,
         {
           headers: {'X-Auth-Token': import.meta.env.VITE_SSO_TOKEN}
         }
       );
-
       return response.data;
     } catch (error: unknown) {
-      console.log(error);
+      console.error('Login error:', error);
       return {
         error: true,
-        message: `Ошибка авторизации: ${
+        message: `Authentication error: ${
           axios.isAxiosError(error) && error.response
             ? error.response.data.Message
-            : 'Неизвестная ошибка'
+            : 'Unknown error'
         }`
       };
     }
