@@ -1,19 +1,23 @@
+import {Button} from '@radix-ui/themes';
 import {Globe} from 'lucide-react';
+import {Hover} from '@/shared/animations';
+import useThemeStore from '@/store/ui/ui-store';
 import {useTranslation} from 'react-i18next';
 
 interface LanguageSwitcherProps {
   text?: {
     size?: number;
-    color?: string;
-    hoverColor?: string;
   };
+  className?: string
 }
 
 export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
-  text = {size: 18, color: '#fff', hoverColor: '#C3073F'}
+  text = {size: 18}, className=''
 }) => {
   const {i18n} = useTranslation();
-  const {size, color, hoverColor} = text;
+  const {size} = text;
+
+  const theme = useThemeStore(state => state.theme);
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'ru' ? 'en' : 'ru';
@@ -21,12 +25,15 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   };
 
   return (
-    <button
-      className={`flex items-center text-[${size}px] gap-1 text-[${color}] transition-colors hover:text-[${hoverColor}]`}
-      onClick={toggleLanguage}
-    >
-      <Globe size={18} />
-      {i18n.language.toUpperCase()}
-    </button>
+    <Hover scale={1.1}>
+      <Button
+        className={`cursor-pointer text-[${size}px] text-${theme as 'dark' | 'light' === 'dark' ? 'white' : 'black'} group ${className}`}
+        onClick={toggleLanguage}
+        title='Сменить язык'
+      >
+        <Globe size={18} />
+        {i18n.language.toUpperCase()}
+      </Button>
+    </Hover>
   );
 };
