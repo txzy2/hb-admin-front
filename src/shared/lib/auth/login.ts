@@ -1,5 +1,3 @@
-import * as CryptoJS from 'crypto-js';
-
 import {
   JWTResponse,
   LogInPersonInputData
@@ -13,6 +11,15 @@ const getEnvVar = (name: string): string => {
     throw new Error(`Environment variable ${name} is not defined`);
   }
   return value;
+};
+
+const hashPassword = async (password: string, salt: string): Promise<string> => {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password + salt);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
 };
 
 export class LoginCore {
@@ -30,19 +37,10 @@ export class LoginCore {
     this.ssoToken = getEnvVar('VITE_SSO_TOKEN');
   }
 
-  private hashPassword = () => {
-    console.log(this.salt)
-    
-    return CryptoJS.HmacSHA256(
-      this.password,
-      this.salt
-    ).toString(CryptoJS.enc.Hex);
-  };
-
-  private collectData = () => {
+  private collectData = async () => {
     return {
       email: this.email,
-      password: this.hashPassword()
+      password: await hashPassword(this.password, this.salt)
     };
   };
 
@@ -50,7 +48,7 @@ export class LoginCore {
     try {
       const response = await axios.post(
         `${this.apiUrl}/sso/login`,
-        this.collectData(),
+        await this.collectData(),
         {headers: {'X-Auth-Token': this.ssoToken}}
       );
 

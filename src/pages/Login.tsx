@@ -37,37 +37,46 @@ const Login: React.FC = () => {
   const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
     setIsLoading(true);
+    setError('');
 
-    const validator = new Validator({email, password}, t);
-    const validateData = validator.validate();
+    try {
+      const validator = new Validator({email, password}, t);
+      const validateData = validator.validate();
 
-    if (validateData.validEmail && validateData.validPass) {
-      const loginCore = new LoginCore({email, password});
-      const tryLogInRequest = await loginCore.sendLogInRequest();
+      if (validateData.validEmail && validateData.validPass) {
+        const loginCore = new LoginCore({email, password});
+        const tryLogInRequest = await loginCore.sendLogInRequest();
 
-      if (tryLogInRequest.jwt) {
-        const tryLogin: LoginReturnType = await login({
-          jwt: tryLogInRequest.jwt,
-          email
-        });
+        if (tryLogInRequest.jwt) {
+          const tryLogin: LoginReturnType = await login({
+            jwt: tryLogInRequest.jwt,
+            email
+          });
 
-        if (!tryLogin.status) {
-          setError(tryLogin.message);
-          setIsLoading(false);
-          return;
+          if (!tryLogin.status) {
+            setError(tryLogin.message);
+            setIsLoading(false);
+            return;
+          }
+
+          navigate('/panel');
+          console.log('Успешный вход');
+        } else {
+          setError(tryLogInRequest.message || 'Ошибка авторизации');
         }
-
-        navigate('/panel');
-        console.log('Успешный вход');
+      } else {
+        setError(
+          validateData.validateInputs === true
+            ? validator.getErrorMessage(validateData)
+            : validateData.validateInputs
+        );
       }
-    } else {
-      setError(
-        validateData.validateInputs === true
-          ? validator.getErrorMessage(validateData)
-          : validateData.validateInputs
-      );
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Произошла ошибка при входе');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
