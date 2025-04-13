@@ -31,6 +31,8 @@ export class LoginCore {
   }
 
   private hashPassword = () => {
+    console.log(this.salt)
+    
     return CryptoJS.HmacSHA256(
       this.password,
       this.salt
