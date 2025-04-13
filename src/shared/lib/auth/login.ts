@@ -3,6 +3,7 @@ import {
   LogInPersonInputData
 } from '@/shared/types/auth/auth.types';
 
+import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
 const getEnvVar = (name: string): string => {
@@ -11,15 +12,6 @@ const getEnvVar = (name: string): string => {
     throw new Error(`Environment variable ${name} is not defined`);
   }
   return value;
-};
-
-const hashPassword = async (password: string, salt: string): Promise<string> => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + salt);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
 };
 
 export class LoginCore {
@@ -37,24 +29,52 @@ export class LoginCore {
     this.ssoToken = getEnvVar('VITE_SSO_TOKEN');
   }
 
-  private collectData = async () => {
-    return {
-      email: this.email,
-      password: await hashPassword(this.password, this.salt)
-    };
+  private hashPassword = () => {
+    try {
+      if (!CryptoJS || !CryptoJS.HmacSHA256) {
+        throw new Error('CryptoJS is not properly initialized');
+      }
+      
+      const hash = CryptoJS.HmacSHA256(
+        this.password,
+        this.salt
+      );
+      
+      if (!hash) {
+        throw new Error('Failed to generate hash');
+      }
+      
+      return hash.toString(CryptoJS.enc.Hex);
+    } catch (error) {
+      console.error('Hash error:', error);
+      throw new Error('Failed to hash password');
+    }
+  };
+
+  private collectData = () => {
+    try {
+      return {
+        email: this.email,
+        password: this.hashPassword()
+      };
+    } catch (error) {
+      console.error('Data collection error:', error);
+      throw error;
+    }
   };
 
   public async sendLogInRequest(): Promise<JWTResponse> {
     try {
+      const data = this.collectData();
       const response = await axios.post(
         `${this.apiUrl}/sso/login`,
-        await this.collectData(),
+        data,
         {headers: {'X-Auth-Token': this.ssoToken}}
       );
 
       return response.data;
     } catch (error: unknown) {
-      console.log(error);
+      console.error('Login request error:', error);
       return {
         error: true,
         message: `Ошибка авторизации: ${
