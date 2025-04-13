@@ -1,5 +1,3 @@
-import * as jose from 'jose';
-
 import {
   AuthState,
   LoginReturnType,
@@ -8,6 +6,7 @@ import {
 
 import Cookies from 'js-cookie';
 import {create} from 'zustand';
+import {jwtDecode} from 'jwt-decode';
 
 const clearAuth = () => {
   Cookies.remove('jwt');
@@ -20,18 +19,23 @@ const clearAuth = () => {
  * Проверяет JWT и возвращает результат валидации.
  *
  * @param {string} jwt - JSON Web Token для проверки.
- * @returns {Promise<jose.JWTVerifyResult>} - Результат валидации JWT, содержащий полезную нагрузку и защищенный заголовок.
+ * @returns {boolean} - Результат валидации JWT.
  */
-const validateJWT = async (jwt: string): Promise<jose.JWTVerifyResult> =>
-  await jose.jwtVerify(
-    jwt,
-    new TextEncoder().encode(import.meta.env.VITE_JWT_SALT),
-    {
-      issuer: 'sso-hb service',
-      audience: 'sso-hb frontend',
-      clockTolerance: 60
+const validateJWT = (jwt: string): boolean => {
+  try {
+    const decoded = jwtDecode(jwt);
+    const currentTime = Date.now() / 1000;
+    
+    // Проверяем, что токен не истек
+    if (decoded.exp && decoded.exp > currentTime) {
+      return true;
     }
-  );
+    return false;
+  } catch (error) {
+    console.error('JWT validation error:', error);
+    return false;
+  }
+};
 
 /**
  * Устанавливает куки и email в локальное хранилище.
@@ -57,17 +61,15 @@ const setCookiesAndEmail = (email: string, jwt: string, expires: number) => {
  * @returns {Promise<boolean>} - Возвращает true, если аутентификация успешна, иначе false.
  */
 const setAuth = async (email: string, jwt: string): Promise<boolean> => {
-  const jwtValidation = await validateJWT(jwt);
-  console.log(jwtValidation);
-
-  if (jwtValidation.protectedHeader && jwtValidation.payload.exp) {
-    setCookiesAndEmail(
-      email,
-      jwt,
-      (jwtValidation.payload.exp * 1000 - Date.now()) / 1000 / 60 / 60 / 24
-    );
-
-    return true;
+  const isValid = validateJWT(jwt);
+  
+  if (isValid) {
+    const decoded = jwtDecode(jwt);
+    if (decoded.exp) {
+      const expiresInDays = (decoded.exp * 1000 - Date.now()) / 1000 / 60 / 60 / 24;
+      setCookiesAndEmail(email, jwt, expiresInDays);
+      return true;
+    }
   }
 
   return false;
