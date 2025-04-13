@@ -26,7 +26,6 @@ const validateJWT = (jwt: string): boolean => {
     const decoded = jwtDecode(jwt);
     const currentTime = Date.now() / 1000;
     
-    // Проверяем, что токен не истек
     if (decoded.exp && decoded.exp > currentTime) {
       return true;
     }
