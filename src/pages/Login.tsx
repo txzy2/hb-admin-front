@@ -163,7 +163,7 @@ const Login: React.FC = () => {
                   <Loader title={{need: false}} />
                 ) : (
                   <>
-                    <LogIn size={18} strokeWidth={3} /> {t('logIn.enter')} 123
+                    <LogIn size={18} strokeWidth={3} /> {t('logIn.enter')}
                   </>
                 )}
               </IconButton>
