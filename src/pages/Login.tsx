@@ -9,6 +9,7 @@ import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Loader} from '@/shared/ui';
 import {LoginCore} from '@/shared/lib/auth/login';
 import {LoginReturnType} from '@/shared/types/storage.types';
+import ThemeSwitcher from '@/shared/ui/theme-switcher/ThemeSwitch';
 import Validator from '@/shared/lib/validator';
 import {useTranslation} from 'react-i18next';
 
@@ -144,7 +145,14 @@ const Login: React.FC = () => {
         </TextField.Root>
 
         <div className='flex flex-col items-center justify-between gap-2'>
-          <div className='w-full flex items-center gap-2'>
+          <div className='w-full flex items-center gap-5'>
+            <ThemeSwitcher className='bg-transparent p-0' />
+
+            <LanguageSwitcher
+              text={{size: 13}}
+              className='bg-transparent p-0'
+            />
+
             <Hover scale={1.02} className='w-full'>
               <IconButton
                 type='submit'
@@ -160,10 +168,6 @@ const Login: React.FC = () => {
                 )}
               </IconButton>
             </Hover>
-
-            <LanguageSwitcher
-              text={{size: 13, color: '#fff', hoverColor: '#fb923c'}}
-            />
           </div>
 
           <Hover scale={1.05}>

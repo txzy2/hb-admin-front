@@ -1,27 +1,29 @@
 import {Moon, Sun} from 'lucide-react';
-import React from 'react';
-import {Button} from '@radix-ui/themes';
-
 import {useSetTheme, useTheme} from '@/store/ui/ui-store';
-import {Hover} from '@/shared/animations';
 
-const ThemeSwitcher: React.FC = () => {
+import {Button} from '@radix-ui/themes';
+import {Hover} from '@/shared/animations';
+import React from 'react';
+
+interface ThemeSwitcherProps {
+  className?: string
+}
+
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({className=''}) => {
   const theme = useTheme();
   const setTheme = useSetTheme();
-
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return (
     <Hover scale={1.1}>
       <Button
-        className='bg-transparent cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 group'
-        onClick={toggleTheme}
+        className={`cursor-pointer  group ${className}`}
+        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
         title='Сменить тему'
       >
         {theme === 'dark' ? (
-          <Sun size={20} className='text-white' />
+          <Sun size={20} className={`text-${theme as 'dark' | 'light' === 'dark' ? 'white' : 'black'}`} />
         ) : (
-          <Moon size={20} className='group-hover:text-white' />
+          <Moon size={20} className={`group-hover:text-${theme as 'dark' | 'light' === 'dark' ? 'white' : 'black'}`} />
         )}
       </Button>
     </Hover>

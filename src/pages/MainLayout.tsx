@@ -38,12 +38,12 @@ const MainLayout: React.FC = () => {
             </ul>
           </nav>
 
-          <LanguageSwitcher />
+          <LanguageSwitcher className='p-0 bg-transparent text-white' text={{size: 19}} />
         </div>
 
-        <div className='h-[90vh] flex flex-col justify-between items-start select-none'>
+        <div className='h-[90vh] flex flex-col justify-between items-start select-none text-white'>
           <FadeIn className='flex flex-col text-[30px] sm:text-[55px] md:px-20 px-10 py-0 flex-grow justify-center'>
-            <h2 className='leading-none'>
+            <h2 className='leading-none '>
               <Link
                 to='/register'
                 className='group tracking-[-3px] sm:tracking-[-8px] uppercase font-bold'

@@ -71,7 +71,7 @@ const Header: React.FC = () => {
       <div className='flex items-center gap-2'>
         {isAuthenticated ? (
           <div className='flex items-center gap-3 text-[16px]'>
-            <ThemeSwitch />
+            <ThemeSwitch className='bg-transparent' />
 
             <DropdownMenu.Root>
               <DropdownMenu.Trigger
