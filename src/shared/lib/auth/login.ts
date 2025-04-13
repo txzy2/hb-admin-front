@@ -30,7 +30,7 @@ export class LoginCore {
     this.ssoToken = getEnvVar('VITE_SSO_TOKEN');
   }
 
-  private hashPassword = () => {
+  private hashPassword = async () => {
     try {
       if (!this.salt) throw new Error('Salt is not defined');
       if (!this.password) throw new Error('Password is not defined');
@@ -43,10 +43,10 @@ export class LoginCore {
     }
   };
 
-  private collectData = () => {
+  private collectData = async () => {
     return {
       email: this.email,
-      password: this.hashPassword()
+      password: await this.hashPassword()
     };
   };
 
@@ -54,7 +54,7 @@ export class LoginCore {
     try {
       const response = await axios.post(
         `${this.apiUrl}/sso/login`,
-        this.collectData(),
+        await this.collectData(),
         {headers: {'X-Auth-Token': this.ssoToken}}
       );
 
