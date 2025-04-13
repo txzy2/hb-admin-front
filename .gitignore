@@ -23,5 +23,5 @@ node_modules
 *.sln
 *.sw?
 
-tsconfig.app.tsbuildinfo
-tsconfig.node.tsbuildinfo
+# tsconfig.app.tsbuildinfo
+# tsconfig.node.tsbuildinfo
