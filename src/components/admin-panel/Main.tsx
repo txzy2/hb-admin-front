@@ -1,13 +1,15 @@
-import {Hover, FadeIn, DownToUp, Rotete} from '@/shared/animations';
+import {DownToUp, FadeIn, Hover, Rotete} from '@/shared/animations';
+
 import {BookCopy} from 'lucide-react';
-import React from 'react';
+import Header from './Header.tsx';
 import {Link} from 'react-router-dom';
-import Header from './Header';
+import React from 'react';
 
 const Main: React.FC = () => {
   return (
     <div className=''>
       <Header />
+
       <div className='h-[85vh] flex flex-col justify-center items-center gap-2'>
         <div className='flex flex-col items-center gap-2'>
           <div className='flex items-center gap-2'>
