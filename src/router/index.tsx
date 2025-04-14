@@ -1,4 +1,3 @@
-import About from '@/pages/About';
 import App from '@/App';
 import Layout from '@/components/Layout';
 import Login from '@/pages/Login';
@@ -24,14 +23,6 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <App />
-          </ProtectedRoute>
-        )
-      },
-      {
-        path: 'panel/about',
-        element: (
-          <ProtectedRoute>
-            <About />
           </ProtectedRoute>
         )
       },
