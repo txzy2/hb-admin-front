@@ -4,7 +4,6 @@ import {IconButton, TextField} from '@radix-ui/themes';
 import React, {useEffect, useState} from 'react';
 import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
-import AuthHeader from '@/components/auth/AuthHeader';
 import {Hover} from '@/shared/animations';
 import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Loader} from '@/shared/ui';
