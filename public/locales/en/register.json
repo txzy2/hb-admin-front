@@ -1,0 +1,9 @@
+{
+  "fullName": "Full name",
+  "email": "Email",
+  "password": "Password",
+  "retype": "Retype password",
+  "question": "Already have an account?",
+  "send": "Send",
+  "anatation": "The password must contain at least 8 elements, a capital letter, a number and a special character."
+}
