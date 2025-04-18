@@ -15,14 +15,6 @@ const CustomNode = ({data}: {data: any}) => {
       className='relative w-full h-full flex items-center justify-center'
       style={handleStyle}
     >
-      {/* <NodeResizer
-        color='#000'
-        isVisible={selected}
-        minWidth={60}
-        minHeight={30}
-        maxHeight={60}
-        maxWidth={120}
-      /> */}
       <NodeResizeControl
         style={handleStyle}
         minWidth={60}

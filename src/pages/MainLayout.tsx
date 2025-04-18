@@ -1,13 +1,9 @@
 import {
   Background,
-  ConnectionMode,
   Controls,
   Edge,
-  MarkerType,
-  MiniMap,
   Node,
   ReactFlow,
-  addEdge,
   useEdgesState,
   useNodesState
 } from '@xyflow/react';
