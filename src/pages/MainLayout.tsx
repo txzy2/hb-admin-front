@@ -37,7 +37,7 @@ const MainLayout: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>(
     []
   );
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [edges, _setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const idRef = useRef(0);
 
   const addNode = useCallback(() => {
