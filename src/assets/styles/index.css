@@ -33,9 +33,10 @@ a {
   }
 }
 
-.light .react-flow__node {
-  background: white;
-  color: #111;
+.react-flow__handle {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 @media (max-width: 768px) {
