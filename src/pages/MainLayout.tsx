@@ -1,8 +1,10 @@
 import {
   Background,
+  ConnectionMode,
   Controls,
   Edge,
   MarkerType,
+  MiniMap,
   Node,
   ReactFlow,
   addEdge,
@@ -10,12 +12,13 @@ import {
   useNodesState
 } from '@xyflow/react';
 import {FadeIn, Hover, LeftToRight} from '@/shared/animations';
+import {Plus, Trash2} from 'lucide-react';
 import React, {useCallback, useRef} from 'react';
 
+import {CustomResizebleNode} from '@/shared/ui';
 import {Flex} from '@radix-ui/themes';
 import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Link} from 'react-router-dom';
-import {Plus} from 'lucide-react';
 import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
 
@@ -23,6 +26,10 @@ const styles = {
   background: '#f8f8f8',
   width: '100%',
   height: '100%'
+};
+
+const nodeTypes = {
+  CustomResizebleNode
 };
 
 interface CustomNodeData extends Record<string, unknown> {
@@ -35,44 +42,39 @@ const MainLayout: React.FC = () => {
     []
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-  const idRef = useRef(0); // Для генерации уникальных ID
-
-  const onConnect = useCallback(
-    (params: any) =>
-      setEdges(eds =>
-        addEdge(
-          {
-            ...params,
-            markerEnd: {
-              type: MarkerType.ArrowClosed
-            },
-            style: {
-              stroke: '#888',
-              strokeWidth: 2
-            }
-          },
-          eds
-        )
-      ),
-    [setEdges]
-  );
+  const idRef = useRef(0);
 
   const addNode = useCallback(() => {
+    if (nodes.length >= 10) {
+      alert('Достигнуто максимальное количество столиков (10)');
+      return;
+    }
+
     const newNodeId = `node-${idRef.current++}`;
     const newNode: Node<CustomNodeData> = {
       id: newNodeId,
-      type: 'default',
+      type: 'CustomResizebleNode',
       data: {
-        label: `Столик ${idRef.current}`
+        label: `Столик ${idRef.current}`,
+        style: {
+          border: `1px dashed #${Math.floor(Math.random() * 16777215).toString(
+            16
+          )}`,
+          borderRadius: '5px',
+          color: '#fff'
+        }
       },
       position: {
-        x: Math.random() * 500,
-        y: Math.random() * 500
-      }
+        x: 0,
+        y: 0
+      },
+      width: 60,
+      height: 30
     };
 
     setNodes(nds => [...nds, newNode]);
-  }, [setNodes]);
+    console.log(nodes);
+  }, [setNodes, nodes.length]);
 
   // Функция для удаления узла
   const removeNode = useCallback(
@@ -184,15 +186,28 @@ const MainLayout: React.FC = () => {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
+            nodeTypes={nodeTypes}
             fitView
             style={styles}
           >
             <Background color='#aaa' gap={16} />
             <Controls />
+
+            <div
+              style={{
+                position: 'absolute',
+                top: '50px',
+                right: '50px',
+                borderRadius: '10px',
+                width: 'calc(100% - 100px)',
+                height: 'calc(100% - 100px)',
+                border: '2px dashed #000',
+                pointerEvents: 'none'
+              }}
+            />
           </ReactFlow>
 
-          <div className='absolute top-4 left-4 z-10 flex items-center gap-3'>
+          <div className='absolute top-4 left-4 z-10 flex gap-1'>
             <button
               onClick={addNode}
               title='Добавить столик'
@@ -205,9 +220,10 @@ const MainLayout: React.FC = () => {
               <button
                 key={node.id}
                 onClick={() => removeNode(node.id)}
-                className='bg-red-500 text-black text-[12px] px-3 py-2 rounded hover:bg-red-400'
+                className='flex items-center gap-1 bg-red-500 text-white text-[12px] px-3 py-2 rounded hover:bg-red-400'
               >
-                Удалить столик {parseInt(node.id.replace('node-', '')) + 1}
+                <Trash2 size={13} /> Столик{' '}
+                {parseInt(node.id.replace('node-', '')) + 1}
               </button>
             ))}
           </div>
