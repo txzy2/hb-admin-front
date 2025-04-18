@@ -1,0 +1,13 @@
+{
+  "least8": "Password must be more than 8 characters",
+  "email": "The email field cannot be empty",
+  "passwordDontSame": "The passwords entered did not happen",
+  "password": "Password field cannot be empty",
+  "wrong-email": "Invalid Email",
+  "passwordRequirements": "Password does not meet requirements",
+  "refreshError": "Unexpected error, please refresh the page",
+  "error": {
+    "first": "Authorization error",
+    "second": "Unexpected error"
+  }
+}
