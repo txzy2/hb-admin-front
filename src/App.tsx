@@ -1,3 +1,5 @@
+import '@xyflow/react/dist/style.css';
+
 import FadeIn from '@/shared/animations/FadeIn';
 import {Main} from '@/components';
 
