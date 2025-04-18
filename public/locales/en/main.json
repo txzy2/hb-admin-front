@@ -1,0 +1,14 @@
+{
+  "connect": {
+    "first": "Connect",
+    "second": "your",
+    "third": "organization"
+  },
+  "book": {
+    "first": "Book",
+    "second": "your",
+    "third": "hookah"
+  },
+  "or": "or",
+  "about": "About us"
+}

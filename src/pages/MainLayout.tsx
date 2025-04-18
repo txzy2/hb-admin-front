@@ -8,7 +8,7 @@ import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
 
 const MainLayout: React.FC = () => {
-  const {t} = useTranslation();
+  const {t} = useTranslation(['nav', 'main']);
   const nextSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToNextSection = () => {
@@ -30,7 +30,7 @@ const MainLayout: React.FC = () => {
                       to={link}
                       className='font-bold text-[16px] sm:text-[20px]'
                     >
-                      {t(titleKey)}
+                      {t(titleKey, {ns: 'nav'})}
                     </Link>
                   </Hover>
                 </li>
@@ -38,7 +38,10 @@ const MainLayout: React.FC = () => {
             </ul>
           </nav>
 
-          <LanguageSwitcher className='p-0 bg-transparent text-white' text={{size: 19}} />
+          <LanguageSwitcher
+            className='p-0 bg-transparent text-white'
+            text={{size: 19}}
+          />
         </div>
 
         <div className='h-[90vh] flex flex-col justify-between items-start select-none text-white'>
@@ -50,20 +53,20 @@ const MainLayout: React.FC = () => {
               >
                 <Flex className='transition-all duration-200 hover:text-[#C3073F] gap-2 md:gap-5 flex-wrap leading-7'>
                   <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                    {t('main.connect.first')}
+                    {t('connect.first', {ns: 'main'})}
                   </span>
                   <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                    {t('main.connect.second')}
+                    {t('connect.second', {ns: 'main'})}
                   </span>
                   <span className='group-hover:tracking-[2px] transition-all duration-200 break-words sm:w-auto w-full'>
-                    {t('main.connect.third')}
+                    {t('connect.third', {ns: 'main'})}
                   </span>
                 </Flex>
               </Link>
             </h2>
 
             <div className='leading-none text-[45px] italic text-[#C3073F]'>
-              {t('main.or')}
+              {t('or', {ns: 'main'})}
             </div>
 
             <LeftToRight>
@@ -74,13 +77,13 @@ const MainLayout: React.FC = () => {
                 >
                   <Flex className='transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5'>
                     <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                      {t('main.book.first')}
+                      {t('book.first', {ns: 'main'})}
                     </span>
                     <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                      {t('main.book.second')}
+                      {t('book.second', {ns: 'main'})}
                     </span>
                     <span className='group-hover:tracking-[2px] transition-all duration-200'>
-                      {t('main.book.third')}
+                      {t('book.third', {ns: 'main'})}
                     </span>
                   </Flex>
                 </Link>
@@ -92,7 +95,7 @@ const MainLayout: React.FC = () => {
             className='mb-4 mx-auto text-[20px] px-6 font-normal uppercase border border-white transition-all duration-200 hover:text-[#C3073F] hover:border-[#C3073F]'
             onClick={scrollToNextSection}
           >
-            {t('main.about')}
+            {t('about', {ns: 'main'})}
           </button>
         </div>
       </div>

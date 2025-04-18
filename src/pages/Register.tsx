@@ -6,7 +6,7 @@ import RegisterStepOne from '@/components/auth/RegisterStepOne';
 import RegisterStepTwo from '@/components/auth/RegisterStepTwo';
 import Validator from '@/shared/lib/validator';
 import useAuthStore from '@/store/auth/auth-store';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -32,12 +32,15 @@ const Register: React.FC = () => {
   const validateandLogIn = async (event: React.MouseEvent) => {
     event.preventDefault();
 
-    const validator = new Validator({
-      email,
-      username,
-      password,
-      passwordRetype
-    }, t);
+    const validator = new Validator(
+      {
+        email,
+        username,
+        password,
+        passwordRetype
+      },
+      t
+    );
     const validateData = validator.validate();
 
     if (
@@ -46,7 +49,7 @@ const Register: React.FC = () => {
       validateData.validPass &&
       validateData.validRetypePass
     ) {
-      const registration = new RegisterCore({email, username, password});
+      const registration = new RegisterCore({email, username, password}, t);
       const sendRegisterRequest = await registration.firstStepRegiserUser();
 
       if (sendRegisterRequest.jwt) {

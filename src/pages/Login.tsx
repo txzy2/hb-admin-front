@@ -45,7 +45,7 @@ const Login: React.FC = () => {
       const validateData = validator.validate();
 
       if (validateData.validEmail && validateData.validPass) {
-        const loginCore = new LoginCore({email, password});
+        const loginCore = new LoginCore({email, password}, t);
         const tryLogInRequest = await loginCore.sendLogInRequest();
 
         if (tryLogInRequest.jwt) {
@@ -61,7 +61,6 @@ const Login: React.FC = () => {
           }
 
           navigate('/panel');
-          console.log('Успешный вход');
         } else {
           setError(tryLogInRequest.message || 'Ошибка авторизации');
         }
@@ -90,7 +89,7 @@ const Login: React.FC = () => {
         <TextField.Root
           className={`w-full text-[13px]`}
           type='email'
-          placeholder={t('logIn.email')}
+          placeholder={t('email', {ns: 'login'})}
           maxLength={30}
           value={email}
           onChange={e => {
@@ -107,7 +106,7 @@ const Login: React.FC = () => {
         <TextField.Root
           className={`text-[13px]`}
           type={showPassword ? 'text' : 'password'}
-          placeholder={t('logIn.password')}
+          placeholder={t('password', {ns: 'login'})}
           maxLength={24}
           value={password}
           onChange={e => {
@@ -146,14 +145,18 @@ const Login: React.FC = () => {
 
         <div className='flex flex-col items-center justify-between gap-2'>
           <div className='w-full flex items-center gap-5'>
-            <ThemeSwitcher className='bg-transparent p-0' />
+            <div className='' onClick={() => setError('')}>
+              <ThemeSwitcher className='bg-transparent p-0' />
+            </div>
 
-            <LanguageSwitcher
-              text={{size: 13}}
-              className='bg-transparent p-0'
-            />
+            <div className='' onClick={() => setError('')}>
+              <LanguageSwitcher
+                text={{size: 13}}
+                className='bg-transparent p-0'
+              />
+            </div>
 
-            <Hover scale={1.02} className='w-full'>
+            <div className='w-full'>
               <IconButton
                 type='submit'
                 onClick={validateandLogIn}
@@ -163,18 +166,17 @@ const Login: React.FC = () => {
                   <Loader title={{need: false}} />
                 ) : (
                   <>
-                    <LogIn size={18} strokeWidth={3} /> {t('logIn.enter')}
+                    <LogIn size={18} strokeWidth={3} />{' '}
+                    {t('enter', {ns: 'login'})}
                   </>
                 )}
               </IconButton>
-            </Hover>
+            </div>
           </div>
 
-          <Hover scale={1.05}>
-            <Link to='/register' className='text-[#fb923c] text-[13px]'>
-              {t('logIn.question')}
-            </Link>
-          </Hover>
+          <Link to='/register' className='text-[#fb923c] text-[13px]'>
+            {t('question', {ns: 'login'})}
+          </Link>
         </div>
 
         <div
