@@ -33,6 +33,11 @@ a {
   }
 }
 
+.light .react-flow__node {
+  background: white;
+  color: #111;
+}
+
 @media (max-width: 768px) {
   .about {
     flex-direction: column;
