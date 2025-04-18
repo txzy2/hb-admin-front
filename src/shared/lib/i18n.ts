@@ -9,12 +9,17 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
+    ns: ['nav', 'main', 'login', 'register', 'validator'],
     debug: false,
     interpolation: {
       escapeValue: false
     },
+    saveMissing: true,
+    missingKeyHandler: (lng, ns, key) => {
+      console.error(`Missing translation: ${lng}.${ns}.${key}`);
+    },
     backend: {
-      loadPath: '/locales/{{lng}}/translation.json'
+      loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
     detection: {
       order: ['localStorage', 'navigator'],

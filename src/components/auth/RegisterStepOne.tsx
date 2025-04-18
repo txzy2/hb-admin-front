@@ -61,7 +61,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <TextField.Root
           className={`w-full text-[13px]`}
           type='text'
-          placeholder={t('register.fullName')}
+          placeholder={t('fullName', {ns: 'register'})}
           maxLength={35}
           value={username}
           onChange={e => {
@@ -78,7 +78,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <TextField.Root
           className={`w-full text-[13px]`}
           type='email'
-          placeholder={t('register.email')}
+          placeholder={t('email', {ns: 'register'})}
           maxLength={30}
           value={email}
           onChange={e => {
@@ -95,7 +95,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <TextField.Root
           className={`w-full text-[13px]`}
           type={showPassword ? 'text' : 'password'}
-          placeholder={t('register.password')}
+          placeholder={t('password', {ns: 'register'})}
           maxLength={24}
           value={password}
           onChange={e => {
@@ -113,7 +113,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
           className={`w-full text-[13px]`}
           type={showPassword ? 'text' : 'password'}
           maxLength={24}
-          placeholder={t('register.retype')}
+          placeholder={t('retype', {ns: 'register'})}
           value={passwordRetype}
           onChange={e => {
             setPasswordRetype(e.target.value);
@@ -166,7 +166,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
         <div className='flex items-center justify-between px-1'>
           <Hover scale={1.02} className='text-center'>
             <Link to='/login' className='text-[#fb923c] text-[12px]'>
-              {t('register.question')}
+              {t('question', {ns: 'register'})}
             </Link>
           </Hover>
 
@@ -177,7 +177,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
               className='ml-auto w-full flex items-center gap-1 cursor-pointer bg-[#fb923c] text-gray-800 font-bold'
             >
               <LogIn size={18} strokeWidth={3} />
-              {t('register.send')}
+              {t('send', {ns: 'register'})}
             </IconButton>
           </Hover>
         </div>
@@ -189,7 +189,7 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
             <CircleAlert />
           </Callout.Icon>
           <Callout.Text className='text-[12px] leading-4'>
-            {t('register.anatation')}
+            {t('anatation', {ns: 'register'})}
           </Callout.Text>
         </Callout.Root>
       </div>

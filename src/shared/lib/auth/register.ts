@@ -13,10 +13,14 @@ export class RegisterCore {
   private username: string;
   private password: string;
 
-  public constructor(user: RegisterPersonInputData) {
+  private t: any;
+
+  public constructor(user: RegisterPersonInputData, t: any) {
     this.email = user.email;
     this.username = user.username;
     this.password = user.password;
+
+    this.t = t;
   }
 
   private hashPassword(): string {
@@ -50,10 +54,10 @@ export class RegisterCore {
     } catch (error: unknown) {
       return {
         error: true,
-        message: `Ошибка регистрации: ${
+        message: `${this.t('error.first', {ns: 'validator'})}: ${
           axios.isAxiosError(error) && error.response
             ? error.response.data.Message
-            : 'Неизвестная ошибка'
+            : this.t('error.second', {ns: 'validator'})
         }`
       };
     }

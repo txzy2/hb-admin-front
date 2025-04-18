@@ -39,19 +39,19 @@ export default class Validator {
     const validations: ValidationConditionsType[] = [
       {
         condition: !this.email.trim(),
-        message: this.t('validator.email')
+        message: this.t('email', {ns: 'validator'})
       },
       {
         condition: !this.password.trim(),
-        message: this.t('validator.password')
+        message: this.t('password', {ns: 'validator'})
       },
       {
         condition: this.password.length < 8,
-        message: this.t('validator.least8')
+        message: this.t('least8', {ns: 'validator'})
       },
       {
         condition: this.passwordRetype && this.passwordRetype !== this.password,
-        message: this.t('validator.passwordDontSame')
+        message: this.t('passwordDontSame', {ns: 'validator'})
       }
     ];
 
@@ -80,13 +80,13 @@ export default class Validator {
 
   public getErrorMessage(validateData: ValidateReturnTypes): string {
     if (!validateData.validEmail) {
-      return 'Невалидная почта';
+      return this.t('wrong-email', {ns: 'validator'});
     } else if (!validateData.validPass || !validateData.validRetypePass) {
-      return 'Пароль не соответствует требованиям';
+      return this.t('passwordRequirements', {ns: 'validator'});
     } else if (typeof validateData.validateInputs === 'string') {
       return validateData.validateInputs;
     } else {
-      return 'Непредвиденная ошибка, обновите страницу';
+      return this.t('refreshError', {ns: 'validator'});
     }
   }
 }
