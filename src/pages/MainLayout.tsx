@@ -24,7 +24,7 @@ const MainLayout: React.FC = () => {
       <div className='bg'>
         <div className='h-[10vh] flex items-center justify-end me-5 sm:me-20 gap-[25px] uppercase'>
           <nav className='hidden sm:block'>
-            <ul className='flex flex-col sm:flex-row items-center gap-2 bg-white text-black p-2 tracking-[-2px] '>
+            <ul className='flex flex-col sm:flex-row items-center gap-2 bg-white text-black p-2 tracking-[-2px]'>
               {list.map(({titleKey, link}, i: number) => (
                 <li
                   key={i}
