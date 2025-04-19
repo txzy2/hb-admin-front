@@ -81,9 +81,9 @@ const Login: React.FC = () => {
 
   return (
     <div className='h-[95vh] flex flex-col items-center justify-center gap-5'>
-      <a href='/'>
+      <Link to='/'>
         <img src='/logo.png' alt='loginLogo' width={230} />
-      </a>
+      </Link>
 
       <Form className='w-[80%] md:w-[40%] xl:w-[17%] flex flex-col gap-3 text-[14px]'>
         <TextField.Root

@@ -14,8 +14,8 @@ body {
 .bg {
   font-family: 'Inter', 'Nunito', sans-serif;
 
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(78, 78, 78, 0.5)),
-    url('/bg.svg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(26, 26, 26, 0.5)),
+    url('/bg.gif');
   background-size: cover;
   background-position: center;
 }

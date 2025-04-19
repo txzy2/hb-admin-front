@@ -53,9 +53,9 @@ const RegisterStepOne: React.FC<StepOneProps> = ({
 
   return (
     <div className='flex flex-col items-center gap-7'>
-      <a href='/'>
+      <Link to='/'>
         <img src='/logo.png' alt='loginLogo' width={230} />
-      </a>
+      </Link>
 
       <form className='w-[80%] xl:w-[60%] flex flex-col gap-3 text-[14px]'>
         <TextField.Root
