@@ -7,10 +7,11 @@ import {
   useEdgesState,
   useNodesState
 } from '@xyflow/react';
-import {FadeIn, Hover, LeftToRight} from '@/shared/animations';
+import {FadeIn, LeftToRight} from '@/shared/animations';
 import {Plus, Trash2} from 'lucide-react';
 import React, {useCallback, useRef} from 'react';
 
+import {BurgerMenu} from '@/shared/ui/burger-menu/BurgerMenu';
 import {CustomResizebleNode} from '@/shared/ui';
 import {Flex} from '@radix-ui/themes';
 import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
@@ -91,27 +92,33 @@ const MainLayout: React.FC = () => {
 
   return (
     <div className=''>
+      {' '}
       <div className='bg'>
-        <div className='h-[10vh] flex items-center justify-end me-20 gap-4 uppercase'>
-          <nav>
+        <div className='h-[10vh] flex items-center justify-end me-5 sm:me-20 gap-4 uppercase'>
+          <nav className='hidden sm:block'>
             <ul className='flex flex-col sm:flex-row items-center gap-2 bg-white text-black p-2 tracking-[-2px] '>
               {list.map(({titleKey, link}, i: number) => (
-                <li key={i} className='hover:underline leading-none'>
-                  <Hover scale={1.02}>
-                    <Link
-                      to={link}
-                      className='font-bold text-[16px] sm:text-[20px]'
-                    >
-                      {t(titleKey, {ns: 'nav'})}
-                    </Link>
-                  </Hover>
+                <li
+                  key={i}
+                  className='leading-none transition-colors duration-500 hover:text-[#C3073F]'
+                >
+                  <Link
+                    to={link}
+                    className='font-bold text-[16px] sm:text-[20px]'
+                  >
+                    {t(titleKey, {ns: 'nav'})}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
+          <div className='sm:hidden'>
+            <BurgerMenu />
+          </div>
+
           <LanguageSwitcher
-            className='p-0 bg-transparent text-white'
+            className='p-0 bg-transparent text-white transition-colors duration-500 hover:text-[#C3073F]'
             text={{size: 19}}
           />
         </div>
@@ -171,7 +178,6 @@ const MainLayout: React.FC = () => {
           </button>
         </div>
       </div>
-
       <div
         ref={nextSectionRef}
         className='h-screen w-full flex items-center justify-center bg-gray-100'
