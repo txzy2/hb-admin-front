@@ -81,7 +81,7 @@ const MainLayout: React.FC = () => {
     [setNodes]
   );
 
-  const {t} = useTranslation(['nav', 'main']);
+  const {t, i18n} = useTranslation(['nav', 'main']);
   const nextSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToNextSection = () => {
@@ -154,13 +154,15 @@ const MainLayout: React.FC = () => {
                   to='/register'
                   className='group tracking-[-2px] sm:tracking-[-8px] uppercase font-bold'
                 >
-                  <Flex className='transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5'>
-                    <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                      {t('book.first', {ns: 'main'})}
-                    </span>
-                    <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                      {t('book.second', {ns: 'main'})}
-                    </span>
+                  <Flex className={`transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5 ${i18n.language === 'ru' ? 'flex-col sm:flex-row' : 'flex-row'}`}>
+                    <div className='flex gap-1 md:gap-5'>
+                      <span className='group-hover:tracking-[-4px] transition-all duration-200'>
+                        {t('book.first', {ns: 'main'})}
+                      </span>
+                      <span className='group-hover:tracking-[0px] transition-all duration-200'>
+                        {t('book.second', {ns: 'main'})}
+                      </span>
+                    </div>
                     <span className='group-hover:tracking-[2px] transition-all duration-200'>
                       {t('book.third', {ns: 'main'})}
                     </span>
