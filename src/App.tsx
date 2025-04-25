@@ -1,14 +1,9 @@
 import '@xyflow/react/dist/style.css';
 
-import FadeIn from '@/shared/animations/FadeIn';
 import {Main} from '@/components';
 
 function App() {
-  return (
-    <FadeIn>
-      <Main />
-    </FadeIn>
-  );
+  return <Main />;
 }
 
 export default App;
