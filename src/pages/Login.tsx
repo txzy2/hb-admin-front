@@ -5,13 +5,16 @@ import React, {useEffect, useState} from 'react';
 import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
-import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Loader} from '@/shared/ui';
 import {LoginCore} from '@/shared/lib/auth/login';
 import {LoginReturnType} from '@/shared/types/storage.types';
 import ThemeSwitcher from '@/shared/ui/theme-switcher/ThemeSwitch';
 import Validator from '@/shared/lib/validator';
 import {useTranslation} from 'react-i18next';
+
+const LanguageSwitcher = React.lazy(
+  () => import('@/shared/ui/language-switcher/LanguageSwitch')
+);
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);

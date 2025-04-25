@@ -1,26 +1,29 @@
 import {FadeIn, LeftToRight} from '@/shared/animations';
-import React, { useRef } from 'react';
+import React, {useCallback, useRef} from 'react';
 
 import {BurgerMenu} from '@/shared/ui/burger-menu/BurgerMenu';
 import {Flex} from '@radix-ui/themes';
-import {LanguageSwitcher} from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Link} from 'react-router-dom';
 import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
 
-const MainLayout: React.FC = () => {
+const LanguageSwitcher = React.lazy(
+  () => import('@/shared/ui/language-switcher/LanguageSwitch')
+);
+
+const MainLayout: React.FC = React.memo(() => {
   const {t, i18n} = useTranslation(['nav', 'main']);
   const nextSectionRef = useRef<HTMLDivElement>(null);
 
-  const scrollToNextSection = () => {
-    if (nextSectionRef.current) {
-      nextSectionRef.current.scrollIntoView({behavior: 'smooth'});
-    }
-  };
+  const isRussian = i18n.language === 'ru';
+
+  const scrollToNextSection = useCallback(() => {
+    // Мемоизировать функцию
+    nextSectionRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, []);
 
   return (
     <div className=''>
-      {' '}
       <div className='bg'>
         <div className='h-[10vh] flex items-center justify-end me-5 sm:me-20 gap-[25px] uppercase'>
           <nav className='hidden sm:block'>
@@ -84,9 +87,7 @@ const MainLayout: React.FC = () => {
                 >
                   <Flex
                     className={`transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5 ${
-                      i18n.language === 'ru'
-                        ? 'flex-col sm:flex-row'
-                        : 'flex-row'
+                      isRussian ? 'flex-col sm:flex-row' : 'flex-row'
                     }`}
                   >
                     <div className='flex gap-1 md:gap-5'>
@@ -122,6 +123,6 @@ const MainLayout: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default MainLayout;

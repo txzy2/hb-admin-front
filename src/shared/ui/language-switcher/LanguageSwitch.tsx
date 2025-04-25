@@ -10,7 +10,7 @@ interface LanguageSwitcherProps {
   className?: string;
 }
 
-export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   text = {size: 18},
   className = ''
 }) => {
@@ -37,3 +37,5 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     </Button>
   );
 };
+
+export default LanguageSwitcher;
