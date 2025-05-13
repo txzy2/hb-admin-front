@@ -36,7 +36,7 @@ export class RegisterCore {
       is_active: false,
       name: this.username,
       password: this.hashPassword(),
-      role: 'admin'
+      role: 'chief'
     };
   }
 
