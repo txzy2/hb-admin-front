@@ -5,16 +5,13 @@ import React, {useEffect, useState} from 'react';
 import useAuthStore, {useIsAuthenticated} from '@/store/auth/auth-store';
 
 import {Hover} from '@/shared/animations';
+import LanguageSwitcher from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Loader} from '@/shared/ui';
 import {LoginCore} from '@/shared/lib/auth/login';
 import {LoginReturnType} from '@/shared/types/storage.types';
 import ThemeSwitcher from '@/shared/ui/theme-switcher/ThemeSwitch';
 import Validator from '@/shared/lib/validator';
 import {useTranslation} from 'react-i18next';
-
-const LanguageSwitcher = React.lazy(
-  () => import('@/shared/ui/language-switcher/LanguageSwitch')
-);
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -148,16 +145,16 @@ const Login: React.FC = () => {
 
         <div className='flex flex-col items-center justify-between gap-2'>
           <div className='w-full flex items-center gap-5'>
-            <div className='' onClick={() => setError('')}>
+            <button className='' onClick={() => setError('')}>
               <ThemeSwitcher className='bg-transparent p-0' />
-            </div>
+            </button>
 
-            <div className='' onClick={() => setError('')}>
+            <button className='' onClick={() => setError('')}>
               <LanguageSwitcher
                 text={{size: 13}}
                 className='bg-transparent p-0'
               />
-            </div>
+            </button>
 
             <div className='w-full'>
               <IconButton

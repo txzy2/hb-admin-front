@@ -1,26 +1,17 @@
 import {FadeIn, LeftToRight} from '@/shared/animations';
-import React, {useCallback, useRef} from 'react';
 
 import {BurgerMenu} from '@/shared/ui/burger-menu/BurgerMenu';
 import {Flex} from '@radix-ui/themes';
+import LanguageSwitcher from '@/shared/ui/language-switcher/LanguageSwitch';
 import {Link} from 'react-router-dom';
+import React from 'react';
 import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
 
-const LanguageSwitcher = React.lazy(
-  () => import('@/shared/ui/language-switcher/LanguageSwitch')
-);
-
 const MainLayout: React.FC = React.memo(() => {
   const {t, i18n} = useTranslation(['nav', 'main']);
-  const nextSectionRef = useRef<HTMLDivElement>(null);
 
   const isRussian = i18n.language === 'ru';
-
-  const scrollToNextSection = useCallback(() => {
-    // Мемоизировать функцию
-    nextSectionRef.current?.scrollIntoView({behavior: 'smooth'});
-  }, []);
 
   return (
     <div className=''>
@@ -106,20 +97,7 @@ const MainLayout: React.FC = React.memo(() => {
               </h2>
             </LeftToRight>
           </FadeIn>
-
-          <button
-            className='mb-4 mx-auto text-[20px] px-6 font-normal uppercase border border-white transition-all duration-200 hover:text-[#C3073F] hover:border-[#C3073F]'
-            onClick={scrollToNextSection}
-          >
-            {t('about', {ns: 'main'})}
-          </button>
         </div>
-      </div>
-      <div
-        ref={nextSectionRef}
-        className='h-screen w-full flex items-center justify-center bg-black'
-      >
-        123
       </div>
     </div>
   );
