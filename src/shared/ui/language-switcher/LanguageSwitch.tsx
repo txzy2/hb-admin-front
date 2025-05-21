@@ -7,11 +7,13 @@ interface LanguageSwitcherProps {
   text?: {
     size?: number;
   };
+  iconSize?: number;
   className?: string;
 }
 
 const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   text = {size: 18},
+  iconSize = 18,
   className = ''
 }) => {
   const {i18n} = useTranslation();
@@ -32,7 +34,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
       onClick={toggleLanguage}
       title='Сменить язык'
     >
-      <Globe size={18} />
+      <Globe size={iconSize} />
       {i18n.language.toUpperCase()}
     </Button>
   );
