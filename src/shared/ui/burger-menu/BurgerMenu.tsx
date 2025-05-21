@@ -1,97 +1,81 @@
-import {AnimatePresence, motion} from 'framer-motion';
-import React, {useState} from 'react';
-
-import {Link} from 'react-router-dom';
-import {list} from '@/shared/constants/links';
-import {useTranslation} from 'react-i18next';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { list } from '@/shared/constants/links';
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../language-switcher/LanguageSwitch';
 
 export const BurgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {t} = useTranslation(['nav']);
+  const { t } = useTranslation(['nav']);
 
   const menuVariants = {
     closed: {
       opacity: 0,
       x: '100%',
-      transition: {
-        duration: 0.3
-      }
+      transition: { duration: 0.3 }
     },
     open: {
       opacity: 1,
       x: 0,
-      transition: {
-        duration: 0.3
-      }
+      transition: { duration: 0.3 }
     }
   };
 
-  const buttonVariants = {
-    closed: {rotate: 0},
-    open: {rotate: 180}
+  // Анимация для верхней линии (превращается в верхнюю часть крестика)
+  const topLine = {
+    closed: { rotate: 0, y: 0, width: '28px' },
+    open: { rotate: 45, y: 8, width: '28px' }
   };
 
-  const lineVariants = {
-    closed: {
-      rotate: 0,
-      y: 0
-    },
-    open: {
-      rotate: 45,
-      y: 8
-    }
+  // Анимация для средней линии (исчезает)
+  const middleLine = {
+    closed: { opacity: 1, width: '28px' },
+    open: { opacity: 0, width: '0px' }
   };
 
-  const lineVariants2 = {
-    closed: {
-      rotate: 0,
-      y: 0
-    },
-    open: {
-      rotate: -45,
-      y: -8
-    }
+  // Анимация для нижней линии (превращается в нижнюю часть крестика)
+  const bottomLine = {
+    closed: { rotate: 0, y: 0, width: '28px' },
+    open: { rotate: -45, y: -8, width: '28px' }
   };
 
   return (
     <div className='relative'>
       <motion.button
-        className={`flex flex-col ${isOpen ? 'gap-2' : 'gap-1'} p-2 z-50 ${
-          isOpen ? 'fixed right-5 top-5' : ''
-        }`}
+        className={`flex flex-col items-center justify-center gap-1.5 z-50 ${isOpen ? 'fixed left-1/2 top-5 -translate-x-1/2' : ''
+          }`}
         onClick={() => setIsOpen(!isOpen)}
-        variants={buttonVariants}
-        animate={isOpen ? 'open' : 'closed'}
       >
         <motion.div
-          className={`w-7 h-[4px] rounded-full ${
-            isOpen ? 'bg-black' : 'bg-white'
-          }`}
-          variants={lineVariants}
+          className={`h-[3px] ${isOpen ? 'bg-black' : 'bg-white'} rounded-full`}
+          variants={topLine}
+          animate={isOpen ? 'open' : 'closed'}
+          transition={{ duration: 0.3 }}
         />
         <motion.div
-          className={`w-7 h-[4px] rounded-full ${
-            isOpen ? 'bg-black' : 'bg-white'
-          }`}
-          variants={lineVariants2}
+          className={`h-[3px] ${isOpen ? 'bg-black' : 'bg-white'} rounded-full`}
+          variants={middleLine}
+          animate={isOpen ? 'open' : 'closed'}
+          transition={{ duration: 0.3 }}
         />
         <motion.div
-          className={`w-7 h-[4px] rounded-full ${
-            isOpen ? 'bg-black' : 'bg-white'
-          }`}
-          variants={lineVariants2}
+          className={`h-[3px] ${isOpen ? 'bg-black' : 'bg-white'} rounded-full`}
+          variants={bottomLine}
+          animate={isOpen ? 'open' : 'closed'}
+          transition={{ duration: 0.3 }}
         />
       </motion.button>
 
+      {/* Меню */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             className='fixed inset-0 bg-[#FAFAFA] z-40'
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            exit={{opacity: 0}}
-            transition={{duration: 0.3}}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <motion.div
               className='h-full w-full flex flex-col items-center justify-center'
@@ -100,28 +84,26 @@ export const BurgerMenu: React.FC = () => {
               animate='open'
               exit='closed'
             >
-              <ul className='flex flex-col gap-3'>
-                {list.map(({titleKey, link}, i: number) => (
-                  <motion.li
-                    key={i}
-                    whileTap={{scale: 0.95}}
-                    className='text-center'
-                  >
+              <ul className='flex flex-col gap-6 text-center'>
+                {list.map(({ titleKey, link }, i) => (
+                  <motion.li key={i} whileTap={{ scale: 0.95 }}>
                     <Link
                       to={link}
                       className='text-black font-bold text-2xl'
                       onClick={() => setIsOpen(false)}
                     >
-                      {t(titleKey, {ns: 'nav'})}
+                      {t(titleKey, { ns: 'nav' })}
                     </Link>
                   </motion.li>
                 ))}
               </ul>
 
-              <LanguageSwitcher
-                className='bg-transparent !text-black font-bold !text-2xl pt-3'
-                iconSize={24}
-              />
+              <div className='mt-8'>
+                <LanguageSwitcher
+                  className='bg-transparent !text-black font-bold text-2xl'
+                  iconSize={28}
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}
