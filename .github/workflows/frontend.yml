@@ -3,7 +3,7 @@ name: Frontend Deployment
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-and-deploy:
@@ -16,13 +16,13 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.14.0' 
+          node-version: '22.14.0'
 
       - name: Install dependencies
         run: yarn install
 
       - name: Build project
-        run: yarn build
+        run: yarn generate-pwa-assets && yarn build
 
       - name: Install rsync and ssh
         run: sudo apt-get update && sudo apt-get install -y rsync openssh-client
@@ -32,11 +32,11 @@ jobs:
           # Создаем .ssh директорию
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          
+
           # Записываем приватный ключ в файл
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          
+
           # Добавляем хост в known_hosts (чтобы избежать вопроса о доверии)
           ssh-keyscan ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
