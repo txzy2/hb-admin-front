@@ -1,15 +1,15 @@
-import {FadeIn, LeftToRight} from '@/shared/animations';
+import { FadeIn, LeftToRight } from '@/shared/animations';
 
-import {BurgerMenu} from '@/shared/ui/burger-menu/BurgerMenu';
-import {Flex} from '@radix-ui/themes';
+import { BurgerMenu } from '@/shared/ui/burger-menu/BurgerMenu';
+import { Flex } from '@radix-ui/themes';
 import LanguageSwitcher from '@/shared/ui/language-switcher/LanguageSwitch';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React from 'react';
-import {list} from '@/shared/constants/links';
-import {useTranslation} from 'react-i18next';
+import { list } from '@/shared/constants/links';
+import { useTranslation } from 'react-i18next';
 
 const MainLayout: React.FC = React.memo(() => {
-  const {t} = useTranslation(['nav', 'main']);
+  const { t } = useTranslation(['nav', 'main']);
 
   return (
     <div className=''>
@@ -17,7 +17,7 @@ const MainLayout: React.FC = React.memo(() => {
         <div className='h-[10vh] flex items-center justify-end me-0 sm:me-20 gap-[25px] uppercase'>
           <nav className='hidden sm:block'>
             <ul className='flex flex-col sm:flex-row items-center gap-2 px-4 pt-[10px] bg-white text-black tracking-[-2px]'>
-              {list.map(({titleKey, link}, i: number) => (
+              {list.map(({ titleKey, link }, i: number) => (
                 <li
                   key={i}
                   className='leading-none m-0 transition-colors duration-300 hover:text-[#C3073F]'
@@ -26,7 +26,7 @@ const MainLayout: React.FC = React.memo(() => {
                     to={link}
                     className='font-bold text-[16px] sm:text-[20px] leading-none'
                   >
-                    {t(titleKey, {ns: 'nav'})}
+                    {t(titleKey, { ns: 'nav' })}
                   </Link>
                 </li>
               ))}
@@ -39,7 +39,7 @@ const MainLayout: React.FC = React.memo(() => {
 
           <LanguageSwitcher
             className='hidden lg:block p-0 bg-transparent text-white transition-colors duration-500 hover:text-[#C3073F] '
-            text={{size: 19}}
+            text={{ size: 19 }}
           />
         </div>
 
@@ -52,20 +52,20 @@ const MainLayout: React.FC = React.memo(() => {
               >
                 <Flex className='flex-nowrap gap-2 md:gap-5 text-[26px] md:text-[60px] items-center leading-7 whitespace-nowrap transition-all duration-200 hover:text-[#C3073F] '>
                   <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                    {t('connect.first', {ns: 'main'})}
+                    {t('connect.first', { ns: 'main' })}
                   </span>
                   <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                    {t('connect.second', {ns: 'main'})}
+                    {t('connect.second', { ns: 'main' })}
                   </span>
                   <span className='group-hover:tracking-[2px] transition-all duration-200'>
-                    {t('connect.third', {ns: 'main'})}
+                    {t('connect.third', { ns: 'main' })}
                   </span>
                 </Flex>
               </Link>
             </h2>
 
             <div className='leading-none text-[35px] md:text-[45px] italic text-[#C3073F]'>
-              {t('or', {ns: 'main'})}
+              {t('or', { ns: 'main' })}
             </div>
 
             <LeftToRight>
@@ -79,20 +79,24 @@ const MainLayout: React.FC = React.memo(() => {
                   >
                     <div className='flex gap-1 md:gap-5 flex-nowrap'>
                       <span className='group-hover:tracking-[-4px] transition-all duration-200'>
-                        {t('book.first', {ns: 'main'})}
+                        {t('book.first', { ns: 'main' })}
                       </span>
                       <span className='group-hover:tracking-[0px] transition-all duration-200'>
-                        {t('book.second', {ns: 'main'})}
+                        {t('book.second', { ns: 'main' })}
                       </span>
                     </div>
                     <span className='group-hover:tracking-[2px] transition-all duration-200'>
-                      {t('book.third', {ns: 'main'})}
+                      {t('book.third', { ns: 'main' })}
                     </span>
                   </Flex>
                 </Link>
               </h2>
             </LeftToRight>
           </FadeIn>
+
+          <div className='bg-white text-black px-2 pt-2 leading-none m-auto font-extrabold lg:text-[24px] text-[18px] tracking-[-3px] mb-[43px]'>
+            HOOKAHBOOKING©2025
+          </div>
         </div>
       </div>
     </div>
