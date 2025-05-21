@@ -43,8 +43,8 @@ const MainLayout: React.FC = React.memo(() => {
           />
         </div>
 
-        <div className='h-[90vh] flex flex-col justify-between items-start select-none text-white'>
-          <FadeIn className='flex flex-col text-[30px] sm:text-[55px] md:px-20 px-10 py-0 flex-grow justify-center'>
+        <div className='h-[90vh] w-full flex flex-col justify-between items-start select-none text-white'>
+          <FadeIn className='w-full flex flex-col text-[30px] sm:text-[55px] md:px-20 ps-2 py-0 flex-grow justify-center'>
             <h2 className='leading-none'>
               <Link
                 to='/register'
