@@ -12,17 +12,21 @@ export const BurgerMenu: React.FC = () => {
   const menuVariants = {
     closed: {
       opacity: 0,
-      x: '100%',
-      transition: { duration: 0.3 }
+      y: 20,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1
+      }
     },
     open: {
       opacity: 1,
-      x: 0,
-      transition: { duration: 0.3 }
+      y: 0,
+      transition: {
+        staggerChildren: 0.1
+      }
     }
   };
 
-  // Анимация для верхней линии (превращается в верхнюю часть крестика)
   const topLine = {
     closed: { rotate: 0, y: 0, width: '28px' },
     open: { rotate: 45, y: 8, width: '28px' }
