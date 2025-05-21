@@ -16,7 +16,7 @@ const MainLayout: React.FC = React.memo(() => {
   return (
     <div className=''>
       <div className='bg'>
-        <div className='h-[10vh] flex items-center justify-end me-5 sm:me-20 gap-[25px] uppercase'>
+        <div className='h-[10vh] flex items-center justify-end me-0 sm:me-20 gap-[25px] uppercase'>
           <nav className='hidden sm:block'>
             <ul className='flex flex-col sm:flex-row items-center gap-2 px-4 pt-[10px] bg-white text-black tracking-[-2px]'>
               {list.map(({titleKey, link}, i: number) => (
@@ -35,12 +35,12 @@ const MainLayout: React.FC = React.memo(() => {
             </ul>
           </nav>
 
-          <div className='sm:hidden'>
+          <div className='sm:hidden m-auto p-0'>
             <BurgerMenu />
           </div>
 
           <LanguageSwitcher
-            className='p-0 bg-transparent text-white transition-colors duration-500 hover:text-[#C3073F]'
+            className='hidden lg:block p-0 bg-transparent text-white transition-colors duration-500 hover:text-[#C3073F] '
             text={{size: 19}}
           />
         </div>

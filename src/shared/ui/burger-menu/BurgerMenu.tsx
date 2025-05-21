@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
+import LanguageSwitcher from '../language-switcher/LanguageSwitch';
 
 export const BurgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -86,7 +87,7 @@ export const BurgerMenu: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className='fixed inset-0 bg-gray-200 z-40'
+            className='fixed inset-0 bg-[#FAFAFA] z-40'
             initial={{opacity: 0}}
             animate={{opacity: 1}}
             exit={{opacity: 0}}
@@ -116,6 +117,11 @@ export const BurgerMenu: React.FC = () => {
                   </motion.li>
                 ))}
               </ul>
+
+              <LanguageSwitcher
+                className='bg-transparent !text-black font-bold !text-2xl pt-3'
+                iconSize={24}
+              />
             </motion.div>
           </motion.div>
         )}
