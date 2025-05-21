@@ -9,9 +9,7 @@ import {list} from '@/shared/constants/links';
 import {useTranslation} from 'react-i18next';
 
 const MainLayout: React.FC = React.memo(() => {
-  const {t, i18n} = useTranslation(['nav', 'main']);
-
-  const isRussian = i18n.language === 'ru';
+  const {t} = useTranslation(['nav', 'main']);
 
   return (
     <div className=''>
