@@ -47,26 +47,26 @@ const MainLayout: React.FC = React.memo(() => {
 
         <div className='h-[90vh] flex flex-col justify-between items-start select-none text-white'>
           <FadeIn className='flex flex-col text-[30px] sm:text-[55px] md:px-20 px-10 py-0 flex-grow justify-center'>
-            <h2 className='leading-none '>
+            <h2 className='leading-none'>
               <Link
                 to='/register'
-                className='group tracking-[-3px] sm:tracking-[-8px] uppercase font-bold'
+                className='group tracking-[-5px] sm:tracking-[-8px] uppercase font-bold'
               >
-                <Flex className='transition-all duration-200 hover:text-[#C3073F] gap-2 md:gap-5 flex-wrap leading-7'>
+                <Flex className='flex-nowrap gap-2 md:gap-5 text-[26px] md:text-[60px] items-center leading-7 whitespace-nowrap transition-all duration-200 hover:text-[#C3073F] '>
                   <span className='group-hover:tracking-[-4px] transition-all duration-200'>
                     {t('connect.first', {ns: 'main'})}
                   </span>
                   <span className='group-hover:tracking-[0px] transition-all duration-200'>
                     {t('connect.second', {ns: 'main'})}
                   </span>
-                  <span className='group-hover:tracking-[2px] transition-all duration-200 break-words sm:w-auto w-full'>
+                  <span className='group-hover:tracking-[2px] transition-all duration-200'>
                     {t('connect.third', {ns: 'main'})}
                   </span>
                 </Flex>
               </Link>
             </h2>
 
-            <div className='leading-none text-[45px] italic text-[#C3073F]'>
+            <div className='leading-none text-[35px] md:text-[45px] italic text-[#C3073F]'>
               {t('or', {ns: 'main'})}
             </div>
 
@@ -74,14 +74,12 @@ const MainLayout: React.FC = React.memo(() => {
               <h2 className='leading-none'>
                 <Link
                   to='/register'
-                  className='group tracking-[-2px] sm:tracking-[-8px] uppercase font-bold'
+                  className='group tracking-[-5px] sm:tracking-[-8px] uppercase font-bold'
                 >
                   <Flex
-                    className={`transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5 ${
-                      isRussian ? 'flex-col sm:flex-row' : 'flex-row'
-                    }`}
+                    className={`text-[28px] sm:text-[55px] transition-all duration-200 hover:text-[#C3073F] gap-1 md:gap-5 flex-nowrap items-center whitespace-nowrap`}
                   >
-                    <div className='flex gap-1 md:gap-5'>
+                    <div className='flex gap-1 md:gap-5 flex-nowrap'>
                       <span className='group-hover:tracking-[-4px] transition-all duration-200'>
                         {t('book.first', {ns: 'main'})}
                       </span>
